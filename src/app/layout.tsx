@@ -61,6 +61,10 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: '/icon.jpg',
+    apple: '/icon.jpg',
   }
 }
 
