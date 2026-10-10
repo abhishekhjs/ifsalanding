@@ -3,6 +3,8 @@ import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { NavBar } from '@/components/nav-bar'
 import { Footer } from '@/components/footer'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -87,6 +89,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NavBar />
         <main id="main">{children}</main>
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
