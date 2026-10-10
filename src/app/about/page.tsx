@@ -58,7 +58,7 @@ export default async function AboutPage() {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
     name: 'About Us & Mentors - IFSA NIT Trichy',
-    url: 'https://ifsanitt.com/about',
+    url: 'https://ifsanitt.vercel.app/about',
     description: 'Learn about IFSA NIT Trichy founding story, advisory board mentors, leadership team, functional verticals, and recruitment process.',
   }
 

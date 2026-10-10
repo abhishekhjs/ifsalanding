@@ -16,7 +16,7 @@ export default function ClientsPage() {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: 'Clients & Partners - IFSA NIT Trichy',
-    url: 'https://ifsanitt.com/clients',
+    url: 'https://ifsanitt.vercel.app/clients',
     description: 'Companies and institutions that work with IFSA NIT Trichy on research, projects and campus events.',
   }
 

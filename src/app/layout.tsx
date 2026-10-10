@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://ifsanitt.com'),
+  metadataBase: new URL('https://ifsanitt.vercel.app'),
   title: {
     template: '%s | IFSA NIT Trichy',
     default: 'IFSA NIT Trichy | Ambition Meets Impact',
@@ -73,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'IFSA NIT Trichy',
-    url: 'https://ifsanitt.com',
+    url: 'https://ifsanitt.vercel.app',
     description: 'The 10th APAC chapter of the International Finance Students Association, founded at NIT Trichy.',
     foundingDate: '2024-12-02',
     parentOrganization: {

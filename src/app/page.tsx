@@ -69,7 +69,7 @@ export default async function HomePage() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'IFSA NIT Trichy',
-    url: 'https://ifsanitt.com',
+    url: 'https://ifsanitt.vercel.app',
   }
 
   return (
