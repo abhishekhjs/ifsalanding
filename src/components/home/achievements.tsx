@@ -1,7 +1,16 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { useReducedMotion, animate, useInView } from 'motion/react'
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+  animate,
+  useInView,
+} from 'motion/react'
+import { ChevronLeft, ChevronRight, Trophy, Award, CheckCircle2 } from 'lucide-react'
 import { FALLBACK_ACHIEVEMENTS } from '@/lib/fallback-data'
 
 /* ── Types ───────────────────────────────────────────────────────────────── */
@@ -15,34 +24,54 @@ type Achievement = {
   year: string
 }
 
-/* ── Dot field (EY CAFTA) ────────────────────────────────────────────────── */
-const TOTAL_DOTS = 1050
-const WINNER_INDICES = new Set([412, 789])
+/* ── Domain focus tags for institutional cards ──────────────────────────── */
+const STRATEGIC_DOMAINS: Record<string, string> = {
+  'ach-finvent': 'Financial Valuation · M&A Strategy',
+  'ach-ey-cafta': 'Corporate Restructuring & Turnaround',
+  'ach-iima-impetus': 'High-Stakes Corporate Strategy',
+  'ach-iima-prameya': 'Financial Forecasting & Business Models',
+  'ach-hec-paris': 'International Business Strategy Simulation',
+  'ach-mckinsey': 'Management Consulting & Market Entry',
+  'ach-iimc-veritas': 'LBO Modeling & Synergy Evaluation',
+  'ach-iimk-iiml': 'Product Monetization & GTM Strategy',
+}
+
+/* ── Dot field (EY CAFTA 1,000+ Teams Visualization) ─────────────────────── */
+const TOTAL_DOTS = 520
+const WINNER_INDICES = new Set([160, 340])
 
 function DotField() {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const isInView = useInView(ref, { once: true, amount: 0.2 })
   const reduce = useReducedMotion()
 
   return (
-    <div ref={ref} className="mt-5 flex flex-wrap gap-[3px]" aria-hidden>
+    <div
+      ref={ref}
+      className="my-3 flex max-h-[50px] flex-wrap gap-[2.5px] overflow-hidden"
+      aria-hidden
+    >
       {Array.from({ length: TOTAL_DOTS }).map((_, i) => {
         const isWinner = WINNER_INDICES.has(i)
-        const delay = reduce ? 0 : Math.min(i * 0.22, 550)
+        const delay = reduce ? 0 : Math.min(i * 0.2, 450)
         return (
           <span
             key={i}
             className={[
-              'inline-block h-[5px] w-[5px] rounded-full',
+              'inline-block h-[3.5px] w-[3.5px] rounded-full',
               reduce
-                ? isWinner ? 'bg-[#59110B]' : 'bg-[#D9C8B6]'
+                ? isWinner
+                  ? 'bg-[#59110B]'
+                  : 'bg-[#D9C8B6]'
                 : isInView
                   ? isWinner
-                    ? 'bg-[#59110B] scale-[1.7] shadow-[0_0_5px_2px_rgba(89,17,11,0.55)]'
+                    ? 'scale-[1.8] bg-[#59110B] shadow-[0_0_6px_2px_rgba(89,17,11,0.65)]'
                     : 'bg-[#D4C5B2]'
                   : 'bg-[#ECE4D9]',
               !reduce && 'transition-all duration-500',
-            ].filter(Boolean).join(' ')}
+            ]
+              .filter(Boolean)
+              .join(' ')}
             style={!reduce ? { transitionDelay: `${delay}ms` } : undefined}
           />
         )
@@ -51,7 +80,7 @@ function DotField() {
   )
 }
 
-/* ── Count-up number (Motion animate, not rAF on state) ─────────────────── */
+/* ── Count-up number ─────────────────────────────────────────────────────── */
 function CountUpNumber({ target, suffix }: { target: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.5 })
@@ -80,199 +109,290 @@ function CountUpNumber({ target, suffix }: { target: number; suffix: string }) {
   )
 }
 
-/* ── Stat strip ─────────────────────────────────────────────────────────── */
-const STATS = [
-  { value: 8, suffix: '', label: 'Podium finishes' },
-  { value: 1, suffix: '', label: 'National title' },
-  { value: 3, suffix: '', label: 'Runner-up finishes' },
-  { value: 1, suffix: '', label: 'Global finalist' },
-  { value: 5, suffix: '+', label: 'IIT and IIM hosts' },
-  { value: 1000, suffix: '+', label: 'Teams beaten at EY' },
-]
-
-function StatStrip() {
-  return (
-    <div className="mt-10 grid grid-cols-3 divide-x divide-y divide-[#E4DACB] overflow-hidden rounded-[10px] border border-[#E4DACB] bg-white md:grid-cols-6 md:divide-y-0">
-      {STATS.map((s) => (
-        <div key={s.label} className="flex flex-col items-center justify-center px-4 py-6">
-          <p className="font-serif text-[30px] leading-none text-[#59110B]">
-            <CountUpNumber target={s.value} suffix={s.suffix} />
-          </p>
-          <p className="mt-1.5 text-center text-[11px] font-medium uppercase tracking-[0.14em] text-[#78716C]">
-            {s.label}
-          </p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-
-/* ── Tier badge ─────────────────────────────────────────────────────────── */
-function TierBadge({ tier }: { tier: string }) {
-  const base = 'inline-block rounded-[4px] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em]'
-  if (tier === 'Winner') return <span className={`${base} bg-[#59110B] text-white`}>Winner</span>
-  if (tier === 'Runner-Up') return <span className={`${base} border border-[#BFAFA0] bg-white text-[#59110B]`}>Runner-Up</span>
-  if (tier === 'Finalist') return <span className={`${base} border border-[#D9C8B6] bg-[#FAF8F5] text-[#7A5424]`}>Finalist</span>
-  return <span className={`${base} border border-[#E4DACB] bg-[#FAF8F5] text-[#78716C]`}>Top Podium</span>
-}
-
-/* ── Small card (6 secondary wins) ─────────────────────────────────────── */
-function AchievementCard({ ach }: { ach: Achievement }) {
-  return (
-    <div className="group flex flex-col justify-between rounded-[8px] border border-[#E4DACB] bg-white p-5 shadow-[var(--shadow-rest)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[#BFAFA0] hover:shadow-[var(--shadow-hover)]">
-      <div>
-        <div className="flex items-center justify-between gap-2">
-          <TierBadge tier={ach.tier} />
-          <span className="shrink-0 text-[11px] font-medium text-[#78716C]">{ach.year}</span>
-        </div>
-        <h3 className="mt-3.5 font-serif text-[16px] font-normal leading-snug text-[#1C1917] transition-colors group-hover:text-[#59110B]">
-          {ach.competition}
-        </h3>
-        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-[#7A5424]">
-          {ach.organizer}
-        </p>
-        <p className="mt-2.5 text-[12.5px] leading-relaxed text-[#44403C]">{ach.description}</p>
-      </div>
-      <div className="mt-4 border-t border-[#F4ECE1] pt-3">
-        <span className="font-serif text-[12.5px] italic text-[#59110B]">{ach.title}</span>
-      </div>
-    </div>
-  )
-}
-
-/* ── Filtered grid (non-All views) ─────────────────────────────────────── */
-function FilteredGrid({ items }: { items: Achievement[] }) {
-  return (
-    <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {items.map((ach) => (
-        <AchievementCard key={ach.id} ach={ach} />
-      ))}
-    </div>
-  )
-}
-
-/* ── Main component ─────────────────────────────────────────────────────── */
+/* ── Main Component ─────────────────────────────────────────────────────── */
 export function HomeAchievements() {
-  const [activeTier, setActiveTier] = useState('All')
-  const TIERS = ['All', 'Winners', 'Runner-Ups', 'Finalists']
+  const [activeIdx, setActiveIdx] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const reduce = useReducedMotion()
 
-  const filtered = FALLBACK_ACHIEVEMENTS.filter((a) => {
-    if (activeTier === 'All') return true
-    if (activeTier === 'Winners') return a.tier === 'Winner'
-    if (activeTier === 'Runner-Ups') return a.tier === 'Runner-Up'
-    if (activeTier === 'Finalists') return a.tier === 'Finalist' || a.tier === 'Top Podium'
-    return true
+  const wins = FALLBACK_ACHIEVEMENTS
+
+  // Vertical scroll tracking across outer container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
   })
 
-  const finvent = FALLBACK_ACHIEVEMENTS.find(a => a.id === 'ach-finvent')
-  const cafta = FALLBACK_ACHIEVEMENTS.find(a => a.id === 'ach-ey-cafta')
-  const rest = FALLBACK_ACHIEVEMENTS.filter(a => a.id !== 'ach-finvent' && a.id !== 'ach-ey-cafta')
+  // Smooth progress to prevent jitter
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    restDelta: 0.001,
+  })
+
+  // Update active index based on scroll position
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      const target = Math.min(
+        wins.length - 1,
+        Math.max(0, Math.floor(latest * wins.length * 1.02))
+      )
+      setActiveIdx(target)
+    })
+    return () => unsubscribe()
+  }, [scrollYProgress, wins.length])
+
+  // Clickable direct jump to any win
+  const scrollToWin = (index: number) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const scrollTop = window.scrollY + rect.top - 68
+    const progressRatio = index / Math.max(1, wins.length - 1)
+    const totalScrollableHeight = containerRef.current.offsetHeight - window.innerHeight + 68
+    window.scrollTo({
+      top: scrollTop + progressRatio * totalScrollableHeight,
+      behavior: 'smooth',
+    })
+  }
+
+  const activeWin = wins[activeIdx] || wins[0]
+  const domainTag = STRATEGIC_DOMAINS[activeWin.id]
 
   return (
-    <section className="border-b border-[#E4DACB] bg-[#FAF8F5] py-20 md:py-28">
-      <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
+    <section className="bg-[#FAF8F5] border-b border-[#E4DACB]">
+      {/* ── Outer Pinned Showcase Track (Desktop: 320vh for smooth scroll-jacking) ── */}
+      <div ref={containerRef} className="relative min-h-[100vh] lg:h-[320vh]">
+        {/* Desktop Sticky Stage */}
+        <div className="lg:sticky lg:top-[68px] lg:h-[calc(100vh-68px)] overflow-hidden flex flex-col justify-center py-10 lg:py-0">
+          <div className="mx-auto max-w-[1280px] w-full px-5 sm:px-8 lg:px-12">
+            
+            {/* Split Screen Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+              
+              {/* ── LEFT COLUMN: Executive Dashboard ────────────────────────── */}
+              <div className="lg:col-span-5 flex flex-col justify-between">
+                <div>
+                  {/* Eyebrow kicker */}
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#59110B]" />
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7A5424]">
+                      Collegiate Competitive Track
+                    </span>
+                  </div>
 
-        {/* Header */}
-        <div className="flex flex-col justify-between gap-4 border-b border-[#E4DACB] pb-8 md:flex-row md:items-end">
-          <div>
-            <h2 className="font-serif text-[32px] font-normal tracking-tight text-[#1C1917] sm:text-[40px]">
-              National and Global Competitions
-            </h2>
-            <p className="mt-2 max-w-[60ch] text-[15px] text-[#78716C]">
-              Our analysts compete and secure podium finishes at premier strategy, valuation, and M&amp;A championships across India and globally.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {TIERS.map((t) => (
-              <button
-                key={t}
-                onClick={() => setActiveTier(t)}
-                className={`rounded-full px-3.5 py-1.5 text-[12.5px] font-medium transition-all ${activeTier === t
-                    ? 'bg-[#59110B] text-white'
-                    : 'border border-[#E4DACB] bg-white text-[#44403C] hover:border-[#59110B] hover:text-[#59110B]'
-                  }`}
-              >
-                {t}
-              </button>
-            ))}
+                  {/* Section Title */}
+                  <h2 className="mt-2.5 font-serif text-[30px] sm:text-[38px] font-normal tracking-tight text-[#1C1917] leading-[1.12]">
+                    National and Global Competitions
+                  </h2>
+                  <p className="mt-2.5 text-[14px] leading-relaxed text-[#78716C] max-w-[46ch]">
+                    Our analysts field high-performing teams for premier strategic valuation,
+                    consulting, and M&amp;A championships across India and worldwide.
+                  </p>
+
+                  {/* Executive Milestone Mini-Strip */}
+                  <div className="mt-6 grid grid-cols-3 divide-x divide-[#E4DACB] rounded-[10px] border border-[#E4DACB] bg-white p-3.5 shadow-xs">
+                    <div className="px-3 text-center">
+                      <p className="font-serif text-[24px] sm:text-[27px] font-normal leading-none text-[#59110B]">
+                        <CountUpNumber target={8} suffix="" />
+                      </p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#78716C]">
+                        Podiums
+                      </p>
+                    </div>
+                    <div className="px-3 text-center">
+                      <p className="font-serif text-[24px] sm:text-[27px] font-normal leading-none text-[#59110B]">
+                        <CountUpNumber target={1} suffix="" />
+                      </p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#78716C]">
+                        1st Place
+                      </p>
+                    </div>
+                    <div className="px-3 text-center">
+                      <p className="font-serif text-[24px] sm:text-[27px] font-normal leading-none text-[#59110B]">
+                        <CountUpNumber target={1000} suffix="+" />
+                      </p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-[#78716C]">
+                        EY Field
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Interactive Progress Timeline (List of 8 Wins) */}
+                <div className="mt-7 hidden lg:block">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#E4DACB]/80 text-[11px] font-mono uppercase tracking-wider text-[#78716C]">
+                    <span>Spotlight Directory</span>
+                    <span>Win {String(activeIdx + 1).padStart(2, '0')} of {String(wins.length).padStart(2, '0')}</span>
+                  </div>
+
+                  <div className="mt-2.5 space-y-1">
+                    {wins.map((item, idx) => {
+                      const isActive = activeIdx === idx
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => scrollToWin(idx)}
+                          className={`group flex w-full items-center justify-between rounded-[6px] px-3 py-1.5 text-left text-[12.5px] transition-all duration-200 ${
+                            isActive
+                              ? 'bg-[#59110B] text-white font-medium shadow-xs'
+                              : 'text-[#44403C] hover:bg-[#F4ECE1]/60 hover:text-[#1C1917]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 truncate">
+                            <span
+                              className={`font-mono text-[10.5px] tabular-nums ${
+                                isActive ? 'text-white/80' : 'text-[#A8A29E]'
+                              }`}
+                            >
+                              {String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span className="truncate">{item.competition}</span>
+                          </div>
+                          <span
+                            className={`shrink-0 font-mono text-[10px] uppercase tracking-wider ${
+                              isActive ? 'text-[#F4ECE1]' : 'text-[#7A5424]'
+                            }`}
+                          >
+                            {item.organizer.split('/')[0].trim()}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ── RIGHT COLUMN: Minimalist Institutional Card Deck ────────── */}
+              <div className="lg:col-span-7">
+                <div className="relative min-h-[460px] sm:min-h-[490px] w-full flex flex-col justify-center">
+                  
+                  {/* Subtle ambient parchment backdrop card */}
+                  <div className="relative w-full overflow-hidden rounded-[18px] border border-[#E4DACB] bg-white p-7 sm:p-10 shadow-[0_16px_36px_-12px_rgba(28,25,23,0.07)]">
+                    
+                    {/* Top subtle brass line */}
+                    <div
+                      aria-hidden
+                      className="absolute inset-x-0 top-0 h-[2.5px] bg-gradient-to-r from-transparent via-[#B48344]/70 to-transparent"
+                    />
+
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeWin.id}
+                        initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                        className="flex flex-col justify-between min-h-[380px] sm:min-h-[400px]"
+                      >
+                        {/* Upper Section */}
+                        <div>
+                          {/* Row 1: Organizer & Verified Institutional Tag */}
+                          <div className="flex items-center justify-between gap-3 border-b border-[#F4ECE1] pb-3.5">
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[#7A5424]">
+                                {activeWin.organizer}
+                              </span>
+                            </div>
+                            <span className="font-mono text-[11px] font-medium text-[#78716C] bg-[#FAF8F5] border border-[#E4DACB] px-2 py-0.5 rounded-[4px]">
+                              {activeWin.year}
+                            </span>
+                          </div>
+
+                          {/* Row 2: Competition Title */}
+                          <h3 className="mt-4 font-serif text-[28px] sm:text-[34px] font-normal leading-[1.14] text-[#1C1917] tracking-tight">
+                            {activeWin.competition}
+                          </h3>
+
+                          {/* Row 3: Verified Placement Stamp */}
+                          <div className="mt-3.5 inline-flex items-center gap-2 rounded-[6px] border border-[#59110B]/20 bg-[#59110B]/5 px-3 py-1 text-[#59110B]">
+                            <CheckCircle2 className="h-3.5 w-3.5 text-[#59110B]" />
+                            <span className="font-serif text-[13.5px] italic font-medium">
+                              {activeWin.title}
+                            </span>
+                          </div>
+
+                          {/* Row 4: Strategic Domain Tag */}
+                          {domainTag && (
+                            <div className="mt-3">
+                              <span className="inline-block rounded-full bg-[#FAF8F5] border border-[#E4DACB] px-2.5 py-0.5 font-mono text-[10.5px] font-medium text-[#7A5424]">
+                                {domainTag}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Row 5: Description & Visual Artifacts */}
+                          {activeWin.id === 'ach-ey-cafta' ? (
+                            <div className="mt-4">
+                              <DotField />
+                              <p className="text-[13.5px] sm:text-[14px] leading-relaxed text-[#44403C]">
+                                {activeWin.description}
+                              </p>
+                              <p className="mt-1.5 font-mono text-[11px] text-[#78716C]">
+                                (Two dots represent IFSA NIT Trichy; out of 1,000+ collegiate teams nationwide.)
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="mt-4 text-[14px] sm:text-[15px] leading-relaxed text-[#44403C]">
+                              {activeWin.description}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Lower Section: Verified Credential & Step Controls */}
+                        <div className="mt-8 border-t border-[#F4ECE1] pt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-[11.5px] font-mono text-[#78716C]">
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#59110B]" />
+                            <span>Verified Podium Finish</span>
+                          </div>
+
+                          {/* Quick Card Controls */}
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => scrollToWin(Math.max(0, activeIdx - 1))}
+                              disabled={activeIdx === 0}
+                              aria-label="Previous win"
+                              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E4DACB] bg-white text-[#44403C] transition-all hover:border-[#59110B] hover:text-[#59110B] disabled:opacity-30 disabled:pointer-events-none shadow-2xs"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => scrollToWin(Math.min(wins.length - 1, activeIdx + 1))}
+                              disabled={activeIdx >= wins.length - 1}
+                              aria-label="Next win"
+                              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#E4DACB] bg-white text-[#44403C] transition-all hover:border-[#59110B] hover:text-[#59110B] disabled:opacity-30 disabled:pointer-events-none shadow-2xs"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Mobile Win Selector Pills (< 1024px) */}
+                  <div className="mt-5 lg:hidden overflow-x-auto pb-1 flex items-center gap-1.5 no-scrollbar">
+                    {wins.map((w, i) => (
+                      <button
+                        key={w.id}
+                        onClick={() => setActiveIdx(i)}
+                        className={`shrink-0 rounded-full px-3 py-1 text-[11.5px] font-mono transition-all ${
+                          activeIdx === i
+                            ? 'bg-[#59110B] text-white font-medium'
+                            : 'border border-[#E4DACB] bg-white text-[#44403C]'
+                        }`}
+                      >
+                        {w.competition.split(' ')[0]}
+                      </button>
+                    ))}
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
-
-        {/* Stat strip */}
-        <StatStrip />
-
-        {activeTier === 'All' ? (
-          <div className="mt-10 grid grid-cols-1 gap-5 lg:grid-cols-12">
-
-            {/* FinVent - winner hero tile */}
-            {finvent && (
-              <div className="group relative col-span-1 overflow-hidden rounded-[12px] bg-[#400A06] p-8 lg:col-span-6">
-                {/* Subtle radial highlight - not gradient slop, just a glow at top-right */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{ background: 'radial-gradient(circle at 85% 10%, rgba(180,131,68,0.18) 0%, transparent 55%)' }}
-                />
-                {/* Thin brass rule at top */}
-                <div aria-hidden className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#B48344] to-transparent opacity-60" />
-
-                <div className="relative z-10 flex h-full flex-col justify-between">
-                  <div>
-                    <TierBadge tier="Winner" />
-                    <h3 className="mt-6 font-serif text-[30px] font-normal leading-tight text-white sm:text-[34px]">
-                      {finvent.competition}
-                    </h3>
-                    <p className="mt-2 text-[12px] font-medium uppercase tracking-[0.14em] text-[#C09A58]">
-                      {finvent.organizer}
-                    </p>
-                    <p className="mt-5 max-w-[50ch] text-[14px] leading-relaxed text-white/65">
-                      {finvent.description}
-                    </p>
-                  </div>
-                  <div className="mt-10 flex items-center justify-between border-t border-white/10 pt-4">
-                    <span className="font-serif text-[13px] italic text-[#C09A58]">{finvent.title}</span>
-                    <span className="text-[11px] font-medium text-white/30">{finvent.year}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* EY CAFTA - dot field tile */}
-            {cafta && (
-              <div className="group col-span-1 overflow-hidden rounded-[12px] border border-[#E4DACB] bg-white p-7 lg:col-span-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <TierBadge tier={cafta.tier} />
-                    <h3 className="mt-4 font-serif text-[22px] font-normal leading-snug text-[#1C1917] transition-colors group-hover:text-[#59110B] sm:text-[24px]">
-                      {cafta.competition}
-                    </h3>
-                    <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-[#7A5424]">
-                      {cafta.organizer}
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-[12px] font-medium text-[#78716C]">{cafta.year}</span>
-                </div>
-
-                <DotField />
-
-                <p className="mt-5 text-[13px] leading-relaxed text-[#44403C]">
-                  Two of those dots are us. Out of 1,000+ collegiate teams across India, we placed second.
-                </p>
-              </div>
-            )}
-
-            {/* Secondary wins - 4 tiles at 3/12 col each */}
-            {rest.map((ach) => (
-              <div key={ach.id} className="col-span-1 lg:col-span-3">
-                <AchievementCard ach={ach} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <FilteredGrid items={filtered} />
-        )}
-
       </div>
     </section>
   )

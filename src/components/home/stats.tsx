@@ -38,29 +38,21 @@ export function HomeStats() {
       value: '12+',
       label: 'National & Global Podiums',
       desc: 'EY CAFTA (Top 2 of 1000+ teams), IIT Madras FinVent (1st), IIM-A Impetus, HEC Paris',
-      badge: 'Championships',
-      highlight: 'IIT Madras 1st Place',
     },
     {
       value: '9',
       label: 'Client Advisory Mandates',
       desc: '3 active live mandates (Varicash, Climate B, myMFD) and 6 completed institutional case studies',
-      badge: 'Client Mandates',
-      highlight: '3 Live · 6 Completed',
     },
     {
       value: '₹17L+',
       label: 'Prize Pools & Grants',
       desc: 'Awarded across IFSC 2026 Summit and premier inter-collegiate championships',
-      badge: 'Total Rewards',
-      highlight: '₹1.2L Cash Pool',
     },
     {
       value: '150+',
       label: 'Forum & Summit Delegates',
       desc: 'Delegates in the first premier finance summit hosted on-campus at NIT Trichy',
-      badge: 'Summit Reach',
-      highlight: 'NIT Trichy Campus',
     },
   ]
 
@@ -169,16 +161,7 @@ export function HomeStats() {
                 }`}
               >
                 <div>
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-[4px] bg-[#F4ECE1] px-2.5 py-0.5 font-mono text-[10.5px] font-medium uppercase text-[#7A5424]">
-                      {stat.badge}
-                    </span>
-                    <span className="font-mono text-[11px] text-[#59110B] font-medium">
-                      {stat.highlight}
-                    </span>
-                  </div>
-
-                  <p className="mt-5 font-serif text-[42px] sm:text-[46px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
+                  <p className="font-serif text-[42px] sm:text-[46px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
                     {stat.value}
                   </p>
 

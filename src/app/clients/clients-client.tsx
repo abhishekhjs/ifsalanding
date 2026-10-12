@@ -6,7 +6,6 @@ import { FALLBACK_CLIENT_PROJECTS, type ClientProject } from '@/lib/fallback-dat
 import { PartnerModal } from '@/components/partner-modal'
 
 const CORPORATE_LOGOS = [
-  { name: 'CFA Institute', src: '/cfa-institute-large.png' },
   { name: 'EY', src: '/ey-framed.png' },
   { name: 'ZS Associates', src: '/zs-framed.png' },
   { name: 'SBI Funds', src: '/sbi-framed.png' },
@@ -72,24 +71,11 @@ export function ClientsPageClient() {
         </div>
       </section>
 
-      {/* Institutional Partnerships & Strategic Alliances (CFA Institute & WSO) */}
-      <section className="border-b border-[#E4DACB] bg-[#F4ECE1] py-14 md:py-20">
-        <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
-          {/* Section Heading */}
-          <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#FAF8F5] border border-[#E4DACB] px-3.5 py-1 text-[11px] font-mono font-medium uppercase text-[#7A5424]">
-                Global Institutional Partnerships
-              </div>
-              <h2 className="mt-3 font-serif text-[28px] font-normal text-[#1C1917] sm:text-[36px]">
-                Strategic Alliances &amp; Educational Accreditations
-              </h2>
-            </div>
-            <p className="text-[14.5px] text-[#44403C] max-w-[500px]">
-              Direct alliances with international credentialing bodies and Wall Street career platforms providing our analysts with institutional curriculum, modeling toolkits, and executive mentorship.
-            </p>
-          </div>
 
+
+      {/* Institutional Partnerships Spotlight Cards (CFA Institute & WSO) */}
+      <section className="border-b border-[#E4DACB] bg-[#F4ECE1] py-14 md:py-18">
+        <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 gap-7">
             {/* CFA Institute Collaboration Spotlight Banner */}
             <div className="flex flex-col items-start justify-between gap-6 rounded-[10px] border border-[#E4DACB] bg-white p-7 sm:p-9 md:p-10 lg:flex-row lg:items-center shadow-xs transition-all hover:border-[#59110B]/50 hover:shadow-md">
@@ -143,8 +129,6 @@ export function ClientsPageClient() {
           </div>
         </div>
       </section>
-
-      {/* Client Projects Listing */}
       <section className="py-16 md:py-24 border-b border-[#E4DACB]">
         <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           {/* Header */}
@@ -300,14 +284,18 @@ export function ClientsPageClient() {
             {CORPORATE_LOGOS.map((p) => (
               <div
                 key={p.name}
-                className="flex aspect-[3/1] items-center justify-center rounded-[8px] border border-[#E4DACB] bg-white p-2 sm:p-2.5 shadow-2xs"
+                className="flex aspect-[3/1] items-center justify-center rounded-[8px] border border-[#E4DACB] bg-white p-2.5 sm:p-3 shadow-2xs"
               >
                 <Image
                   src={p.src}
                   alt={p.name}
                   width={300}
                   height={100}
-                  className="h-full w-full object-contain"
+                  className={`object-contain ${
+                    p.name === 'P&G'
+                      ? 'h-[60%] w-auto max-w-[70%]'
+                      : 'h-[80%] w-[85%]'
+                  }`}
                 />
               </div>
             ))}
@@ -316,8 +304,22 @@ export function ClientsPageClient() {
       </section>
 
       {/* Partnership Models */}
-      <section className="py-16 md:py-24 border-b border-[#E4DACB] bg-[#F4ECE1]">
-        <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
+      <section className="relative overflow-hidden py-16 md:py-24 border-b border-[#E4DACB]">
+        {/* Blurred IFSA Session 1 background image (reduced blur to 40%) */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <Image
+            src="/ifsa-sess-1.jpg"
+            alt="IFSA Session"
+            fill
+            className="object-cover object-center scale-105 blur-[3.5px]"
+            sizes="100vw"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-[#F4ECE1]/72" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F4ECE1]/85 via-transparent to-[#F4ECE1]/85" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-[720px] text-center">
             <p className="font-mono text-[11px] font-medium tracking-[0.16em] uppercase text-[#7A5424]">
               Engagement Models
@@ -334,7 +336,7 @@ export function ClientsPageClient() {
             {PARTNERSHIP_MODELS.map((model) => (
               <div
                 key={model.name}
-                className="flex flex-col justify-between rounded-[8px] border border-[#E4DACB] bg-white p-8 shadow-xs"
+                className="flex flex-col justify-between rounded-[10px] border border-[#E4DACB] bg-white/95 backdrop-blur-md p-8 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-[#59110B]/50 hover:shadow-lg"
               >
                 <div>
                   <h3 className="font-serif text-[20px] font-normal text-[#1C1917]">
@@ -358,17 +360,18 @@ export function ClientsPageClient() {
                     </ul>
                   </div>
                 </div>
-
-                <div className="mt-8 border-t border-[#F4ECE1] pt-5">
-                  <button
-                    onClick={() => setModalOpen(true)}
-                    className="w-full rounded-[4px] border border-[#59110B] bg-white py-2.5 text-[13.5px] font-medium text-[#59110B] transition-all hover:bg-[#59110B] hover:text-white"
-                  >
-                    Inquire for mandate →
-                  </button>
-                </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-12 flex justify-center">
+            <button
+              onClick={() => setModalOpen(true)}
+              className="inline-flex items-center gap-2.5 rounded-[6px] bg-[#59110B] px-8 py-3.5 text-[14px] font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#400A06] hover:shadow-md hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <span>Inquire for mandate</span>
+              <span className="text-white/80">→</span>
+            </button>
           </div>
         </div>
       </section>

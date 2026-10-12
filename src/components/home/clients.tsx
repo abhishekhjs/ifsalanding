@@ -70,8 +70,6 @@ const CLIENT_PARTNERS = [
 ]
 
 const CORPORATE_LOGOS = [
-  { name: 'CFA Institute', src: '/cfa-institute-large.png' },
-  { name: 'Wall Street Oasis', src: '/WSO-logo.png' },
   { name: 'EY', src: '/ey-framed.png' },
   { name: 'ZS Associates', src: '/zs-framed.png' },
   { name: 'SBI Funds', src: '/sbi-framed.png' },
@@ -99,17 +97,17 @@ export function HomeClients() {
           <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 sm:w-36 bg-gradient-to-l from-[#FAF8F5] to-transparent" />
 
           {/* Scrolling track */}
-          <div className="flex w-max items-center gap-6 py-3 animate-[partner-scroll_32s_linear_infinite]">
+          <div className="flex w-max items-center gap-6 sm:gap-7 py-3 animate-[partner-scroll_32s_linear_infinite]">
             {repeatedLogos.map((partner, idx) => (
               <div
                 key={idx}
-                className="flex aspect-[3/1] h-16 sm:h-20 shrink-0 items-center justify-center rounded-[8px] border border-[#E4DACB] bg-white p-2 sm:p-2.5 shadow-2xs"
+                className="flex aspect-[2.9/1] h-18 sm:h-22 shrink-0 items-center justify-center rounded-[10px] sm:rounded-[12px] border border-[#E4DACB] bg-white p-3 sm:p-4 shadow-xs"
               >
                 <div className="relative flex h-full w-full items-center justify-center">
                   <Image
                     src={partner.src}
                     alt={partner.name}
-                    width={240}
+                    width={260}
                     height={80}
                     className="h-full w-full object-contain"
                   />
