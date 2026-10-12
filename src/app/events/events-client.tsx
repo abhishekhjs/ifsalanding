@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import type { Database } from '@/types/database'
 
 type Event = Database['public']['Tables']['events']['Row']
@@ -28,6 +29,7 @@ export function EventsPageClient({ events }: { events: Event[] }) {
       <section className="relative border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
         <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="max-w-[820px]">
+            <Breadcrumbs items={[{ label: 'Events & Initiatives' }]} />
             <div className="inline-flex items-center gap-2 rounded-full bg-[#F4ECE1] px-3.5 py-1 font-mono text-[11px] font-medium tracking-wider uppercase text-[#7A5424]">
               Chapter Initiatives &amp; Masterclasses
             </div>

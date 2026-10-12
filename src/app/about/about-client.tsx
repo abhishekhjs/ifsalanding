@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import type { Database } from '@/types/database'
 
 type TeamMember = Database['public']['Tables']['team_members']['Row']
@@ -75,6 +76,7 @@ export function AboutPageClient({ team, faqs }: { team: TeamMember[]; faqs: FAQ[
       <section className="relative border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
         <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="max-w-[840px]">
+            <Breadcrumbs items={[{ label: 'About Us & Mentors' }]} />
             <div className="inline-flex items-center gap-2 rounded-full bg-[#F4ECE1] px-3.5 py-1 font-mono text-[11px] font-medium tracking-wider uppercase text-[#7A5424]">
               Chapter Identity &amp; Advisory
             </div>
@@ -115,7 +117,7 @@ export function AboutPageClient({ team, faqs }: { team: TeamMember[]; faqs: FAQ[
                 {member.headshot_url ? (
                   <Image
                     src={member.headshot_url}
-                    alt={member.name}
+                    alt={`${member.name} - ${member.role} at IFSA NIT Trichy`}
                     fill
                     className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 320px"

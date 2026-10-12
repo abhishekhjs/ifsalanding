@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Publications & Research',
   description:
     'Institutional-grade equity research, sector deep-dives, macro analysis, and impact micro-theses authored and peer-reviewed by IFSA NIT Trichy analysts.',
+  alternates: {
+    canonical: '/publications',
+  },
   openGraph: {
     title: 'Publications & Research | IFSA NIT Trichy',
     description: 'Institutional-grade equity research, sector deep-dives, macro analysis, and impact micro-theses authored and peer-reviewed by IFSA NIT Trichy analysts.',
@@ -38,6 +41,25 @@ export default async function PublicationsPage() {
     )
   const resolvedPubs = !isLegacyPlaceholder && pubs && pubs.length > 0 ? pubs : FALLBACK_PUBLICATIONS
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://ifsanitt.vercel.app',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Publications & Research',
+        item: 'https://ifsanitt.vercel.app/publications',
+      },
+    ],
+  }
+
   const publicationsSchema = resolvedPubs.map(pub => ({
     '@context': 'https://schema.org',
     '@type': 'ScholarlyArticle',
@@ -56,6 +78,10 @@ export default async function PublicationsPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(publicationsSchema) }}

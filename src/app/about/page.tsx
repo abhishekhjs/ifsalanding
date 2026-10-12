@@ -6,7 +6,10 @@ import { FALLBACK_FAQS, FALLBACK_TEAM_MEMBERS } from '@/lib/fallback-data'
 export const metadata: Metadata = {
   title: 'About Us & Mentors',
   description:
-    'Learn about IFSA NIT Trichy founding story, advisory board mentors, leadership team, functional verticals, and recruitment process.',
+    'Learn about the IFSA NIT Trichy founding story, advisory board mentors, leadership team, functional verticals, and recruitment process.',
+  alternates: {
+    canonical: '/about',
+  },
   openGraph: {
     title: 'About Us & Mentors | IFSA NIT Trichy',
     description: 'Learn about IFSA NIT Trichy founding story, advisory board mentors, leadership team, and functional verticals.',
@@ -53,7 +56,6 @@ export default async function AboutPage() {
   }))
   const resolvedFaqs = faqs && faqs.length > 0 ? faqs : FALLBACK_FAQS
 
-
   const aboutSchema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
@@ -62,11 +64,51 @@ export default async function AboutPage() {
     description: 'Learn about IFSA NIT Trichy founding story, advisory board mentors, leadership team, functional verticals, and recruitment process.',
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://ifsanitt.vercel.app',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About Us & Mentors',
+        item: 'https://ifsanitt.vercel.app/about',
+      },
+    ],
+  }
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: resolvedFaqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  }
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <AboutPageClient team={resolvedTeam} faqs={resolvedFaqs} />
     </>

@@ -15,6 +15,8 @@ export function HomeHero() {
           src="https://colorflow-embed.b-cdn.net/embed.html#e=bSxtyF9E"
           className="h-full w-full border-0 object-cover"
           title="Hero background animation"
+          loading="lazy"
+          aria-hidden="true"
         />
       </div>
 
@@ -45,7 +47,7 @@ export function HomeHero() {
 
           {/* Headline */}
           <h1 className="mt-7 font-serif text-[42px] leading-[1.15] font-normal tracking-tight text-[#1C1917] sm:text-[56px] lg:text-[64px]">
-            Where ambition meets <span className="inline-block font-serif italic text-[#59110B] pb-1">impact</span>.
+            <span className="sr-only">IFSA NIT Trichy — </span>Where ambition meets <span className="inline-block font-serif italic text-[#59110B] pb-1">impact</span>.
           </h1>
 
           {/* Subtext */}

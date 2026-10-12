@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { FALLBACK_CLIENT_PROJECTS, type ClientProject } from '@/lib/fallback-data'
 import { PartnerModal } from '@/components/partner-modal'
 
@@ -50,6 +51,7 @@ export function ClientsPageClient() {
       <section className="relative border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
         <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="max-w-[840px]">
+            <Breadcrumbs items={[{ label: 'Clients & Partners' }]} />
             <div className="inline-flex items-center gap-2 rounded-full bg-[#F4ECE1] px-3.5 py-1 font-mono text-[11px] font-medium tracking-wider uppercase text-[#7A5424]">
               Venture &amp; Corporate Advisory
             </div>
@@ -217,7 +219,7 @@ export function ClientsPageClient() {
                     <div className="relative my-4 flex aspect-[3/1] w-full items-center justify-center rounded-[8px] bg-white p-2.5 sm:p-3 border border-[#E4DACB] shadow-2xs group-hover:border-[#59110B]/50 transition-colors">
                       <Image
                         src={proj.logo}
-                        alt={proj.client}
+                        alt={`${proj.client} logo - IFSA NIT Trichy Advisory Partner`}
                         width={360}
                         height={120}
                         className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105"
@@ -309,7 +311,7 @@ export function ClientsPageClient() {
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <Image
             src="/ifsa-sess-1.jpg"
-            alt="IFSA Session"
+            alt="IFSA NIT Trichy finance workshop and advisory discussion"
             fill
             className="object-cover object-center scale-105 blur-[3.5px]"
             sizes="100vw"

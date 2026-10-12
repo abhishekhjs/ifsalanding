@@ -28,6 +28,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ifsanitt.vercel.app'),
+  alternates: {
+    canonical: './',
+  },
   title: {
     template: '%s | IFSA NIT Trichy',
     default: 'IFSA NIT Trichy | Ambition Meets Impact',
@@ -61,6 +64,13 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   icons: {
     icon: '/icon.jpg',
@@ -74,11 +84,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@type': 'Organization',
     name: 'IFSA NIT Trichy',
     url: 'https://ifsanitt.vercel.app',
+    logo: 'https://ifsanitt.vercel.app/icon.jpg',
     description: 'The 10th APAC chapter of the International Finance Students Association, founded at NIT Trichy.',
     foundingDate: '2024-12-02',
+    sameAs: [
+      'https://www.linkedin.com/company/ifsa-nit-trichy',
+      'https://www.instagram.com/ifsa_nitt',
+      'https://www.wallstreetoasis.com',
+    ],
     parentOrganization: {
       '@type': 'Organization',
       name: 'International Finance Students Association',
+      url: 'https://ifsanetwork.com',
     },
   }
 

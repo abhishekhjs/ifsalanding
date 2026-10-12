@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import { Eye, BookOpen, FileText } from 'lucide-react'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Pub, resolveCover, resolvePdf } from '@/lib/publication-utils'
 import { PdfViewerModal } from '@/components/publications/pdf-viewer-modal'
 
@@ -53,6 +54,7 @@ export function PublicationsPageClient({ pubs }: { pubs: Pub[] }) {
       <section className="relative border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
         <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
           <div className="max-w-[820px]">
+            <Breadcrumbs items={[{ label: 'Publications & Research' }]} />
             <div className="inline-flex items-center gap-2 rounded-full bg-[#F4ECE1] px-3.5 py-1 font-mono text-[11px] font-medium tracking-wider uppercase text-[#7A5424]">
               Peer-Reviewed Research Archive
             </div>
@@ -176,7 +178,7 @@ export function PublicationsPageClient({ pubs }: { pubs: Pub[] }) {
                           <div className="pointer-events-none absolute inset-y-0 left-0 w-2.5 bg-gradient-to-r from-black/25 via-black/10 to-transparent z-10" />
                           <Image
                             src={resolveCover(spotlightPub)}
-                            alt={spotlightPub.title}
+                            alt={`Research Dossier: ${spotlightPub.title} - IFSA NIT Trichy`}
                             fill
                             sizes="(max-width: 768px) 240px, 320px"
                             className="object-cover"
@@ -281,7 +283,7 @@ export function PublicationsPageClient({ pubs }: { pubs: Pub[] }) {
                         >
                           <Image
                             src={coverUrl}
-                            alt={pub.title}
+                            alt={`Research Report: ${pub.title} - IFSA NIT Trichy`}
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"

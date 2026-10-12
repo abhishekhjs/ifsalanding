@@ -68,7 +68,7 @@ export function HomeFeaturedPubs({ pubs }: HomeFeaturedPubsProps) {
                         <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-black/25 to-transparent z-10" />
                         <Image
                           src={resolveCover(leadPub)}
-                          alt={leadPub.title}
+                          alt={`Featured Research Dossier: ${leadPub.title} - IFSA NIT Trichy`}
                           fill
                           sizes="200px"
                           className="object-cover"
@@ -145,7 +145,7 @@ export function HomeFeaturedPubs({ pubs }: HomeFeaturedPubsProps) {
                         <div className="pointer-events-none absolute inset-y-0 left-0 w-1 bg-gradient-to-r from-black/20 to-transparent z-10" />
                         <Image
                           src={coverUrl}
-                          alt={pub.title}
+                          alt={`Research Report: ${pub.title} - IFSA NIT Trichy`}
                           fill
                           sizes="60px"
                           className="object-cover"

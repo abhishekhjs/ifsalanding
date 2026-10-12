@@ -13,11 +13,18 @@ type Event = Database['public']['Tables']['events']['Row']
 type Pub = Database['public']['Tables']['publications']['Row']
 
 export const metadata: Metadata = {
-  title: 'Home',
-  description: 'The 10th APAC chapter of the International Finance Students Association, founded at NIT Trichy.',
+  title: {
+    absolute: 'IFSA NIT Trichy | Ambition Meets Impact',
+  },
+  description:
+    'Official chapter of the International Finance Students Association at NIT Trichy. In strategic partnership with Wall Street Oasis (WSO). Live venture advisory, equity research, and finance summits.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title: 'Home | IFSA NIT Trichy',
-    description: 'The 10th APAC chapter of the International Finance Students Association, founded at NIT Trichy.',
+    title: 'IFSA NIT Trichy | Ambition Meets Impact',
+    description:
+      'Official chapter of the International Finance Students Association at NIT Trichy. In strategic partnership with Wall Street Oasis (WSO).',
     url: '/',
   },
 }

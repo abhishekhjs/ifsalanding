@@ -106,7 +106,7 @@ export function HomeClients() {
                 <div className="relative flex h-full w-full items-center justify-center">
                   <Image
                     src={partner.src}
-                    alt={partner.name}
+                    alt={`${partner.name} logo - IFSA NIT Trichy corporate partner`}
                     width={260}
                     height={80}
                     className="h-full w-full object-contain"
@@ -162,7 +162,7 @@ export function HomeClients() {
                     <div className="relative my-4 flex aspect-[3/1] w-full items-center justify-center rounded-[8px] bg-white p-2.5 sm:p-3 border border-[#E4DACB] shadow-2xs group-hover:border-[#59110B]/50 transition-colors">
                       <Image
                         src={client.logo}
-                        alt={client.name}
+                        alt={`${client.name} logo - IFSA NIT Trichy client mandate`}
                         width={360}
                         height={120}
                         className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105"

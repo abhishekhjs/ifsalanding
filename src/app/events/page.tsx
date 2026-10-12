@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Events & Initiatives',
   description:
     'Case competitions, national finance summits, executive masterclasses, and trading simulations hosted by IFSA NIT Trichy.',
+  alternates: {
+    canonical: '/events',
+  },
   openGraph: {
     title: 'Events & Initiatives | IFSA NIT Trichy',
     description: 'Case competitions, national finance summits, executive masterclasses, and trading simulations.',
@@ -37,6 +40,25 @@ export default async function EventsPage() {
     )
   const resolvedEvents = !isLegacyPlaceholder && events && events.length > 0 ? events : FALLBACK_EVENTS
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://ifsanitt.vercel.app',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Events & Initiatives',
+        item: 'https://ifsanitt.vercel.app/events',
+      },
+    ],
+  }
+
   const eventsSchema = resolvedEvents.map(event => ({
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -59,6 +81,10 @@ export default async function EventsPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsSchema) }}

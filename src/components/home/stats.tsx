@@ -7,15 +7,15 @@ import Link from 'next/link'
 const SESSION_SLIDES = [
   {
     image: '/ifsa-sess-1.jpg',
-    alt: 'IFSA Session 1',
+    alt: 'IFSA NIT Trichy students in executive financial modeling masterclass',
   },
   {
     image: '/ifsa-sess-2.jpg',
-    alt: 'IFSA Session 2',
+    alt: 'IFSA chapter analysts presenting case competition valuation strategy',
   },
   {
     image: '/ifsa-sess-3.jpg',
-    alt: 'IFSA Session 3',
+    alt: 'IFSA general body meeting and investment research workshop at NIT Trichy',
   },
 ]
 
