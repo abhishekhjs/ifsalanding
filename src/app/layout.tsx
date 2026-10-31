@@ -3,6 +3,8 @@ import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { NavBar } from '@/components/nav-bar'
 import { Footer } from '@/components/footer'
+import { SmoothScrollProvider } from '@/components/smooth-scroll-provider'
+import { AnnouncementBar } from '@/components/announcement-bar'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
@@ -106,10 +108,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
-        <a href="#main" className="skip-link">Skip to content</a>
-        <NavBar />
-        <main id="main">{children}</main>
-        <Footer />
+        <SmoothScrollProvider>
+          <a href="#main" className="skip-link">Skip to content</a>
+          <AnnouncementBar />
+          <NavBar />
+          <main id="main">{children}</main>
+          <Footer />
+        </SmoothScrollProvider>
         <Analytics />
         <SpeedInsights />
       </body>

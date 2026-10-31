@@ -1,8 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const SESSION_SLIDES = [
   {
@@ -20,9 +24,11 @@ const SESSION_SLIDES = [
 ]
 
 export function HomeStats() {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const cardsRef = useRef<HTMLDivElement>(null)
 
   // Automatic slideshow cycle every 4.5 seconds (paused on hover)
   useEffect(() => {
@@ -32,6 +38,58 @@ export function HomeStats() {
     }, 4500)
     return () => clearInterval(timer)
   }, [isPaused])
+
+  // GSAP ScrollTrigger entrance
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion || !sectionRef.current) return
+
+    const section = sectionRef.current
+
+    const ctx = gsap.context(() => {
+      if (bannerRef.current) {
+        gsap.fromTo(
+          bannerRef.current,
+          { opacity: 0, y: 35, scale: 0.98 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.85,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: bannerRef.current,
+              start: 'top 85%',
+              once: true,
+            },
+          }
+        )
+      }
+
+      if (cardsRef.current) {
+        const cards = cardsRef.current.children
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 30, scale: 0.96 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            stagger: 0.08,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: cardsRef.current,
+              start: 'top 88%',
+              once: true,
+            },
+          }
+        )
+      }
+    }, section)
+
+    return () => ctx.revert()
+  }, [])
 
   const stats = [
     {
@@ -57,7 +115,7 @@ export function HomeStats() {
   ]
 
   return (
-    <section className="border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
+    <section ref={sectionRef} className="border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24">
       <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
         {/* Section Header */}
         <div className="mb-8 pb-4 border-b border-[#E4DACB]">
@@ -68,6 +126,7 @@ export function HomeStats() {
 
         {/* Cinematic Stripe Sessions Style Keynote Banner with Automatic Slideshow */}
         <div
+          ref={bannerRef}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           className="group/banner relative overflow-hidden rounded-[20px] sm:rounded-[26px] border border-[#2A231E]/30 bg-[#0B0F19] text-white shadow-[0_20px_50px_-15px_rgba(28,25,23,0.35)]"
@@ -145,37 +204,84 @@ export function HomeStats() {
           </div>
         </div>
 
-        {/* Coordinated 4 Stat Cards Grid (Option B) */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, idx) => {
-            const isHovered = hoveredIdx === idx
-            return (
-              <div
-                key={idx}
-                onMouseEnter={() => setHoveredIdx(idx)}
-                onMouseLeave={() => setHoveredIdx(null)}
-                className={`group relative flex flex-col justify-between rounded-[12px] border p-6 sm:p-7 transition-all duration-200 ${
-                  isHovered
-                    ? 'border-[#59110B] bg-white shadow-[0_16px_32px_-6px_rgba(89,17,11,0.12)] -translate-y-1.5'
-                    : 'border-[#E4DACB] bg-white shadow-xs'
-                }`}
-              >
-                <div>
-                  <p className="font-serif text-[42px] sm:text-[46px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
-                    {stat.value}
-                  </p>
+        {/* Bento Stat Grid: lead card 2×wide, 2 regular, 1 full-width dark accent */}
+        <div ref={cardsRef} className="mt-8 sm:mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
-                  <h4 className="mt-3.5 font-serif text-[16px] font-normal text-[#1C1917] group-hover:text-[#59110B] transition-colors">
-                    {stat.label}
-                  </h4>
-                </div>
+          {/* Card 0 — 2× wide lead (podiums) */}
+          <div className="group relative flex flex-col justify-between rounded-[12px] border border-[#E4DACB] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:shadow-[0_12px_28px_-8px_rgba(28,25,23,0.08)] hover:-translate-y-1 sm:col-span-2">
+            <div>
+              <p className="font-serif text-[52px] sm:text-[58px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
+                {stats[0].value}
+              </p>
+              <h4 className="mt-3 font-serif text-[18px] font-normal text-[#1C1917]">
+                {stats[0].label}
+              </h4>
+            </div>
+            <p className="mt-4 text-[13px] leading-relaxed text-[#57534E] border-t border-[#F4ECE1] pt-3.5">
+              {stats[0].desc}
+            </p>
+            {/* Subtle decorative slash */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute right-6 top-5 font-serif text-[80px] leading-none text-[#F4ECE1] select-none"
+            >
+              ✦
+            </span>
+          </div>
 
-                <p className="mt-4 text-[13px] leading-relaxed text-[#57534E] border-t border-[#F4ECE1] pt-3.5">
-                  {stat.desc}
+          {/* Card 1 — Mandates */}
+          <div className="group relative flex flex-col justify-between rounded-[12px] border border-[#E4DACB] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:shadow-[0_12px_28px_-8px_rgba(28,25,23,0.08)] hover:-translate-y-1">
+            <div>
+              <p className="font-serif text-[42px] sm:text-[46px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
+                {stats[1].value}
+              </p>
+              <h4 className="mt-3.5 font-serif text-[16px] font-normal text-[#1C1917]">
+                {stats[1].label}
+              </h4>
+            </div>
+            <p className="mt-4 text-[13px] leading-relaxed text-[#57534E] border-t border-[#F4ECE1] pt-3.5">
+              {stats[1].desc}
+            </p>
+          </div>
+
+          {/* Card 2 — Prize pool */}
+          <div className="group relative flex flex-col justify-between rounded-[12px] border border-[#E4DACB] bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:shadow-[0_12px_28px_-8px_rgba(28,25,23,0.08)] hover:-translate-y-1">
+            <div>
+              <p className="font-serif text-[42px] sm:text-[46px] leading-none font-normal text-[#59110B] tabular-nums tracking-tight">
+                {stats[2].value}
+              </p>
+              <h4 className="mt-3.5 font-serif text-[16px] font-normal text-[#1C1917]">
+                {stats[2].label}
+              </h4>
+            </div>
+            <p className="mt-4 text-[13px] leading-relaxed text-[#57534E] border-t border-[#F4ECE1] pt-3.5">
+              {stats[2].desc}
+            </p>
+          </div>
+
+          {/* Card 3 — Delegates — full-width dark accent strip */}
+          <div className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-[12px] bg-[#1C1917] px-7 py-6 shadow-[0_8px_20px_-6px_rgba(28,25,23,0.25)] transition-all duration-300 hover:shadow-[0_16px_32px_-8px_rgba(28,25,23,0.35)] sm:col-span-2 lg:col-span-4">
+            <div className="flex items-baseline gap-5">
+              <p className="font-serif text-[48px] sm:text-[56px] leading-none font-normal text-white tabular-nums tracking-tight">
+                {stats[3].value}
+              </p>
+              <div>
+                <h4 className="font-serif text-[18px] font-normal text-white/90">
+                  {stats[3].label}
+                </h4>
+                <p className="mt-1 text-[13px] leading-relaxed text-white/50 max-w-[52ch]">
+                  {stats[3].desc}
                 </p>
               </div>
-            )
-          })}
+            </div>
+            <Link
+              href="/events"
+              className="shrink-0 inline-flex h-10 items-center gap-2 rounded-[6px] border border-white/20 bg-white/10 px-5 text-[13.5px] font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/30"
+            >
+              View summits →
+            </Link>
+          </div>
+
         </div>
       </div>
     </section>
