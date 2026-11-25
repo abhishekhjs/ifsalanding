@@ -1,33 +1,34 @@
-# Graph Report - ifsa-nit-trichy  (2026-11-22)
+# Graph Report - ifsa-nit-trichy  (2026-11-25)
 
 ## Corpus Check
-- 103 files · ~315,195 words
+- 130 files · ~330,818 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 6 file(s) not represented in the graph (top: (none) 4, .ico 1, .css 1)
+- Unclassified: 9 file(s) not represented in the graph (top: (none) 4, .css 3, .ico 2)
 
 ## Summary
-- 952 nodes · 1156 edges · 54 communities (46 shown, 8 thin omitted)
+- 1113 nodes · 1533 edges · 64 communities (53 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 13 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `09498e26`
+- Built from commit: `f4c761b3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - package.json
-- database.ts
-- Navigation & Hero Showcase
 - fallback-data.ts
+- cn
+- react
 - Hardening Controls
-- Publications & Page Routing
+- publications-client.tsx
 - Shadcn Component Aliases
 - TypeScript Configuration
 - Root Layout & Font System
-- about/page.tsx
+- about-client.tsx
 - Supabase & Remote Seeds
 - app/page.tsx
+- text-animator.tsx
 - Quality Gate Scripting
 - Agent Idea Refine Script
 - PostCSS Build Pipeline
@@ -55,73 +56,80 @@
 - dependencies
 - Doubt-Driven Development
 - Process
-- about-client.tsx
+- clients-client.tsx
 - Using Agent Skills
 - Spec-Driven Development
 - next
 - Source-Driven Development
 - Refinement & Evaluation Criteria
 - Ideation Frameworks Reference
-- achievements.tsx
+- partner-flow.tsx
 - scripts
 - @playwright/test
 - README.md
 - AGENTS.md
-- @vercel/speed-insights
-- clients.tsx
+- sheet.tsx
+- typing-text.tsx
+- dialog.tsx
+- eight.tsx
+- events-client.tsx
+- eslint.config.mjs
+- button.tsx
+- build-and-graph-guidelines.md
+- @vercel/analytics
 
 ## God Nodes (most connected - your core abstractions)
-1. `next` - 28 edges
-2. `react` - 19 edges
+1. `react` - 34 edges
+2. `next` - 33 edges
 3. `Code Review and Quality` - 19 edges
-4. `compilerOptions` - 16 edges
-5. `Git Workflow and Versioning` - 15 edges
-6. `Test-Driven Development` - 15 edges
-7. `PartnerModal()` - 14 edges
-8. `Database` - 13 edges
-9. `Browser Testing with DevTools` - 13 edges
-10. `CI/CD and Automation` - 13 edges
+4. `CardReveal()` - 19 edges
+5. `SidewaysWordReveal()` - 17 edges
+6. `compilerOptions` - 16 edges
+7. `Git Workflow and Versioning` - 15 edges
+8. `Test-Driven Development` - 15 edges
+9. `motion` - 14 edges
+10. `Breadcrumbs()` - 14 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Surprising Connections (you probably didn't know these)` --references--> `RootLayout()`  [INFERRED]
-  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/app/layout.tsx
 - `God Nodes (most connected - your core abstractions)` --references--> `HomePage()`  [INFERRED]
   .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/app/page.tsx
-- `Surprising Connections (you probably didn't know these)` --references--> `HomePage()`  [INFERRED]
-  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/app/page.tsx
-- `Surprising Connections (you probably didn't know these)` --references--> `HomeAchievements()`  [INFERRED]
-  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/components/home/achievements.tsx
-- `Surprising Connections (you probably didn't know these)` --references--> `NavBar()`  [INFERRED]
-  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/components/nav-bar.tsx
+- `God Nodes (most connected - your core abstractions)` --references--> `Breadcrumbs()`  [INFERRED]
+  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/components/breadcrumbs.tsx
+- `God Nodes (most connected - your core abstractions)` --references--> `PartnerModal()`  [INFERRED]
+  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/components/partner-modal.tsx
+- `God Nodes (most connected - your core abstractions)` --references--> `Database`  [INFERRED]
+  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/types/database.ts
+- `Surprising Connections (you probably didn't know these)` --references--> `EventsPageClient()`  [INFERRED]
+  .gfy-replace-bak-r7el20b8.tmp/GRAPH_REPORT.md → src/app/events/events-client.tsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (54 total, 8 thin omitted)
+## Communities (64 total, 11 thin omitted)
 
 ### Community 0 - "package.json"
-Cohesion: 0.12
-Nodes (21): eslintConfig, devDependencies, eslint@^9, eslint-config-next@16.3.8, tailwindcss@^4, @tailwindcss/postcss@^4, @types/node@^20, @types/react@^19 (+13 more)
-
-### Community 1 - "database.ts"
-Cohesion: 0.21
-Nodes (10): InquiryInsert, Event, metadata, metadata, Pub, PublicationsPage(), FALLBACK_PUBLICATIONS, supabase (+2 more)
-
-### Community 2 - "Navigation & Hero Showcase"
-Cohesion: 0.07
-Nodes (26): class-variance-authority@^0.7.1, cn@^0.4.0, @base-ui/react, class-variance-authority, cn, HomeHero(), NAV, NavBar() (+18 more)
-
-### Community 3 - "fallback-data.ts"
 Cohesion: 0.16
-Nodes (12): CORPORATE_LOGOS, PARTNERSHIP_MODELS, Achievement, ClientProject, Event, FALLBACK_CLIENT_PROJECTS, FALLBACK_EVENTS, FALLBACK_MENTORS (+4 more)
+Nodes (16): devDependencies, tailwindcss@^4, @tailwindcss/postcss@^4, @types/node@^20, @types/react@^19, @types/react-dom@^19, typescript@^5, name (+8 more)
+
+### Community 1 - "fallback-data.ts"
+Cohesion: 0.11
+Nodes (23): FAQ, metadata, TeamMember, InquiryInsert, Event, metadata, metadata, Pub (+15 more)
+
+### Community 2 - "cn"
+Cohesion: 0.15
+Nodes (8): @base-ui/react@^1.8.0, class-variance-authority@^0.7.1, cn@^0.4.0, @base-ui/react, class-variance-authority, cn, Badge(), badgeVariants
+
+### Community 3 - "react"
+Cohesion: 0.06
+Nodes (40): motion, react, CardRevealProps, Reveal, BarChartProps, AnimatedImage, AnimatedImageProps, AnimatedImageRef (+32 more)
 
 ### Community 4 - "Hardening Controls"
 Cohesion: 0.05
 Nodes (42): Broken Access Control, Broken Authentication, Cross-Site Scripting (XSS), Data Classification, Dependency Audit Triage, Destructive Operations on Derived Paths, File Upload Safety, Hardening Patterns (+34 more)
 
-### Community 5 - "Publications & Page Routing"
-Cohesion: 0.12
-Nodes (16): lucide-react, react, metadata, CATS, PROCESS, PublicationsPageClient(), YEARS, HomeFeaturedPubs() (+8 more)
+### Community 5 - "publications-client.tsx"
+Cohesion: 0.28
+Nodes (12): PublicationsPage(), CATS, PROCESS, PublicationsPageClient(), HomeFeaturedPubsProps, PdfViewerModal(), PdfViewerModalProps, COVER_MAP (+4 more)
 
 ### Community 6 - "Shadcn Component Aliases"
 Cohesion: 0.09
@@ -132,20 +140,24 @@ Cohesion: 0.11
 Nodes (18): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+10 more)
 
 ### Community 8 - "Root Layout & Font System"
-Cohesion: 0.19
-Nodes (10): fraunces, ibmPlexMono, ibmPlexSans, metadata, RootLayout(), AnnouncementBar(), FOOT_COLS, Footer() (+2 more)
-
-### Community 9 - "about/page.tsx"
 Cohesion: 0.18
-Nodes (11): AboutPageClient(), FAQ, TeamMember, VALUES, VERTICALS, AboutPage(), FAQ, metadata (+3 more)
+Nodes (11): fraunces, ibmPlexMono, ibmPlexSans, metadata, RootLayout(), CookieBanner(), AnnouncementBar(), FOOT_COLS (+3 more)
+
+### Community 9 - "about-client.tsx"
+Cohesion: 0.15
+Nodes (14): AboutPageClient(), DESK_LEADERS, DeskLeader, FAQ, TeamMember, VALUES, VERTICALS, AboutPage() (+6 more)
 
 ### Community 10 - "Supabase & Remote Seeds"
 Cohesion: 0.22
 Nodes (7): @supabase/supabase-js@^2.117.2, @supabase/supabase-js, EVENTS, FAQS, PUBLICATIONS, supabase, TEAM_MEMBERS
 
 ### Community 11 - "app/page.tsx"
-Cohesion: 0.16
-Nodes (14): Event, HomePage(), metadata, Pub, HomeClients(), Event, HomeFeaturedEvents(), HomeFeaturedEventsProps (+6 more)
+Cohesion: 0.14
+Nodes (25): Event, HomePage(), metadata, Pub, CardReveal(), MetricCountUp(), ShortSlideDown(), SidewaysWordReveal() (+17 more)
+
+### Community 12 - "text-animator.tsx"
+Cohesion: 0.09
+Nodes (43): BASE_SPEC, DEFAULT_PHRASES, ShortSlideDownProps, animatePhase(), applyPhaseStart(), buildKineticFrame(), cleanupLoop(), clearStage() (+35 more)
 
 ### Community 16 - "Code Review and Quality"
 Cohesion: 0.07
@@ -212,8 +224,8 @@ Cohesion: 0.09
 Nodes (21): Build Failure Triage, Common Rationalizations, Debugging and Error Recovery, Error-Specific Patterns, Instrumentation Guidelines, Overview, Red Flags, Runtime Error Triage (+13 more)
 
 ### Community 32 - "Communities (16 total, 4 thin omitted)"
-Cohesion: 0.10
-Nodes (20): Communities (16 total, 4 thin omitted), Community 0 - "Linting & Dependencies", Community 10 - "Supabase & Remote Seeds", Community 11 - "Client Mandates & GSAP", Community 1 - "Next.js Config & API Routes", Community 2 - "Navigation & Hero Showcase", Community 3 - "About Page & Team Structure", Community 4 - "Base UI Primitives" (+12 more)
+Cohesion: 0.09
+Nodes (21): Communities (16 total, 4 thin omitted), Community 0 - "Linting & Dependencies", Community 10 - "Supabase & Remote Seeds", Community 11 - "Client Mandates & GSAP", Community 1 - "Next.js Config & API Routes", Community 2 - "Navigation & Hero Showcase", Community 3 - "About Page & Team Structure", Community 4 - "Base UI Primitives" (+13 more)
 
 ### Community 33 - "Interview Me"
 Cohesion: 0.11
@@ -233,7 +245,7 @@ Nodes (17): Anti-patterns to Avoid, Common Rationalizations, Detailed Instructio
 
 ### Community 37 - "dependencies"
 Cohesion: 0.12
-Nodes (17): dependencies, @base-ui/react@^1.8.0, lenis@^1.3.26, lucide-react@^1.52.0, motion@^14.0.0, next@16.3.8, react@19.2.8, react-dom@19.2.8 (+9 more)
+Nodes (16): dependencies, gsap@^3.15.0, lenis@^1.3.26, motion@^12.43.0, next@16.3.8, react@19.2.8, react-dom@19.2.8, shadcn@^4.21.3 (+8 more)
 
 ### Community 38 - "Doubt-Driven Development"
 Cohesion: 0.12
@@ -243,9 +255,9 @@ Nodes (15): Common Rationalizations, Cross-model escalation, Doubt-Driven Develo
 Cohesion: 0.12
 Nodes (15): 1. Define "working" before instrumenting, 2. Pick the right signal for each question, 3. Structured logging, 4. Metrics, 5. Distributed tracing, 6. Alerting, 7. Verify the telemetry itself, Common Rationalizations (+7 more)
 
-### Community 40 - "about-client.tsx"
-Cohesion: 0.19
-Nodes (12): God Nodes (most connected - your core abstractions), Surprising Connections (you probably didn't know these), ClientsPageClient(), ClientsPage(), metadata, Event, EventsPageClient(), TYPES (+4 more)
+### Community 40 - "clients-client.tsx"
+Cohesion: 0.22
+Nodes (11): Surprising Connections (you probably didn't know these), ClientsPageClient(), PARTNERSHIP_MODELS, ClientsPage(), metadata, clamp(), getScrollParent(), StackedSections() (+3 more)
 
 ### Community 41 - "Using Agent Skills"
 Cohesion: 0.13
@@ -267,9 +279,9 @@ Nodes (11): 1. User Value, 2. Feasibility, 3. Differentiation, Assumption Audit,
 Cohesion: 0.22
 Nodes (8): Analogous Inspiration, Constraint-Based Ideation, First Principles Thinking, How Might We (HMW), Ideation Frameworks Reference, Jobs to Be Done (JTBD), Pre-mortem, SCAMPER
 
-### Community 47 - "achievements.tsx"
-Cohesion: 0.38
-Nodes (6): CountUpNumber(), DotField(), HomeAchievements(), STRATEGIC_DOMAINS, WINNER_INDICES, FALLBACK_ACHIEVEMENTS
+### Community 47 - "partner-flow.tsx"
+Cohesion: 0.13
+Nodes (14): lucide-react@^0.475.0, lucide-react, metadata, metadata, PartnerPage(), FormData, INITIAL_DATA, PartnerFlow() (+6 more)
 
 ### Community 48 - "scripts"
 Cohesion: 0.40
@@ -279,27 +291,53 @@ Nodes (5): scripts, build, dev, lint, start
 Cohesion: 0.50
 Nodes (3): Deploy on Vercel, Getting Started, Learn More
 
-### Community 54 - "clients.tsx"
-Cohesion: 0.25
-Nodes (7): gsap@^3.15.0, gsap, CLIENT_PARTNERS, ClientPartner, CORPORATE_LOGOS, FILTER_TABS, MandateCategory
+### Community 52 - "sheet.tsx"
+Cohesion: 0.23
+Nodes (7): NAV, NavBar(), Sheet(), SheetContent(), SheetOverlay(), SheetPortal(), SheetTrigger()
+
+### Community 54 - "typing-text.tsx"
+Cohesion: 0.23
+Nodes (11): CursorWrapper(), NormalEffect(), SmoothEffect(), Type(), TypingDirection, Backward, Forward, TypingText() (+3 more)
+
+### Community 55 - "dialog.tsx"
+Cohesion: 0.26
+Nodes (7): PartnerModal(), Props, Dialog(), DialogContent(), DialogOverlay(), DialogPortal(), DialogTitle()
+
+### Community 56 - "eight.tsx"
+Cohesion: 0.41
+Nodes (11): BentoCard(), BentoCardProps, CardEyCafta(), CardFinvent(), CardHecParis(), CardImpetus(), CardKotlerProdWiz(), CardPrameya() (+3 more)
+
+### Community 57 - "events-client.tsx"
+Cohesion: 0.22
+Nodes (9): COLLAGE_PARTNER_LOGOS, Event, EventsPageClient(), FORUM_AVENUES, FORUM_DELIVERABLES, parseEventDate(), STATS, TYPES (+1 more)
+
+### Community 59 - "eslint.config.mjs"
+Cohesion: 0.33
+Nodes (5): eslintConfig, eslint@^9, eslint-config-next@16.3.8, eslint, eslint-config-next
+
+### Community 60 - "button.tsx"
+Cohesion: 0.67
+Nodes (3): Button(), buttonVariants, DialogFooter()
 
 ## Knowledge Gaps
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **2 isolated node(s):** `Forward`, `Backward`
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 748 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `next` connect `next` to `package.json`, `database.ts`, `Navigation & Hero Showcase`, `fallback-data.ts`, `dependencies`, `Publications & Page Routing`, `about-client.tsx`, `about/page.tsx`, `Root Layout & Font System`, `app/page.tsx`, `clients.tsx`?**
-  _High betweenness centrality (0.026) - this node is a cross-community bridge._
-- **Should `package.json` be split into smaller, more focused modules?**
-  _Cohesion score 0.1225296442687747 - nodes in this community are weakly interconnected._
-- **Why does `react` connect `Publications & Page Routing` to `package.json`, `Navigation & Hero Showcase`, `fallback-data.ts`, `dependencies`, `about-client.tsx`, `about/page.tsx`, `Root Layout & Font System`, `app/page.tsx`, `achievements.tsx`, `clients.tsx`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Should `Navigation & Hero Showcase` be split into smaller, more focused modules?**
-  _Cohesion score 0.06823529411764706 - nodes in this community are weakly interconnected._
-- **Why does `Graph Report - ifsa-nit-trichy  (2026-11-01)` connect `Communities (16 total, 4 thin omitted)` to `about-client.tsx`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `package.json`, `dependencies`, `publications-client.tsx`, `clients-client.tsx`, `about-client.tsx`, `Root Layout & Font System`, `app/page.tsx`, `text-animator.tsx`, `partner-flow.tsx`, `sheet.tsx`, `typing-text.tsx`, `dialog.tsx`, `events-client.tsx`, `card.tsx`?**
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+- **What connects `Forward`, `Backward` to the rest of the system?**
+  _2 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `fallback-data.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.10967741935483871 - nodes in this community are weakly interconnected._
+- **Why does `next` connect `next` to `package.json`, `fallback-data.ts`, `react`, `dependencies`, `publications-client.tsx`, `clients-client.tsx`, `about-client.tsx`, `Root Layout & Font System`, `app/page.tsx`, `partner-flow.tsx`, `sheet.tsx`, `events-client.tsx`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Should `react` be split into smaller, more focused modules?**
+  _Cohesion score 0.05764145954521417 - nodes in this community are weakly interconnected._
+- **Why does `Graph Report - ifsa-nit-trichy  (2026-11-01)` connect `Communities (16 total, 4 thin omitted)` to `clients-client.tsx`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Should `Hardening Controls` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
-- **Should `Publications & Page Routing` be split into smaller, more focused modules?**
-  _Cohesion score 0.12413793103448276 - nodes in this community are weakly interconnected._
