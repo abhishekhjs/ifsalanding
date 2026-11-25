@@ -256,6 +256,15 @@ export const FALLBACK_TEAM_MEMBERS: TeamMember[] = [
     created_at: new Date('2024-12-02').toISOString(),
   },
   {
+    id: 'team-yash-kapoor',
+    name: 'Yash Kapoor',
+    role: 'Secretary',
+    vertical: 'Executive Board',
+    headshot_url: '/yash-kapoor.jpg',
+    linkedin_url: 'https://www.linkedin.com/in/yash-kapoor-034216328/',
+    created_at: new Date('2024-12-02').toISOString(),
+  },
+  {
     id: 'team-tejas-kamath',
     name: 'Tejas Kamath',
     role: 'Director of Internal Affairs',

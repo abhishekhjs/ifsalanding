@@ -128,7 +128,7 @@ export function PdfViewerModal({
     return (
       <aside
         onClick={() => setIsMinimized(false)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-3.5 rounded-full bg-[#FAF8F5] border border-[#BFAFA0] px-4 py-2.5 shadow-[0_16px_36px_rgba(0,0,0,0.18)] cursor-pointer hover:border-[#59110B] hover:shadow-[0_20px_45px_rgba(89,17,11,0.18)] transition-all hover:scale-[1.02] group"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-3.5 rounded-full bg-[#FAF8F5] border border-[#BFAFA0] px-4 py-2.5 shadow-[0_16px_36px_rgba(0,0,0,0.18)] cursor-pointer hover:border-[#184E32] hover:shadow-[0_20px_45px_rgba(24,78,50,0.18)] transition-all hover:scale-[1.02] group"
         role="button"
         tabIndex={0}
         title="Click to restore research dossier"
@@ -145,7 +145,7 @@ export function PdfViewerModal({
 
         <div className="flex flex-col text-left">
           <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wide text-[#7A5424]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#59110B] animate-pulse" />
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#184E32] animate-pulse" />
             <span>Reading</span>
           </div>
           <p className="font-serif text-[13px] text-[#1C1917] font-normal max-w-[210px] sm:max-w-[280px] truncate">
@@ -154,7 +154,7 @@ export function PdfViewerModal({
         </div>
 
         <div className="flex items-center gap-1.5 pl-2 border-l border-[#E4DACB]">
-          <span className="rounded-full bg-[#F4ECE1] p-1 text-[#44403C] group-hover:bg-[#59110B] group-hover:text-white transition-colors">
+          <span className="rounded-full bg-[#F4ECE1] p-1 text-[#44403C] group-hover:bg-[#184E32] group-hover:text-white transition-colors">
             <Maximize2 className="h-3 w-3" />
           </span>
           <button
@@ -234,7 +234,7 @@ export function PdfViewerModal({
               type="button"
               onClick={handleCopyCitation}
               title="Copy academic citation"
-              className="inline-flex h-8 items-center gap-1.5 rounded-[5px] border border-[#E4DACB] bg-white px-3 text-[12px] font-mono text-[#44403C] hover:border-[#59110B] hover:text-[#59110B] shadow-2xs transition-colors cursor-pointer"
+              className="inline-flex h-8 items-center gap-1.5 rounded-[5px] border border-[#E6DFD3] bg-white px-3 text-[12px] font-mono text-[#44403C] hover:border-[#184E32] hover:text-[#184E32] shadow-2xs transition-colors cursor-pointer"
             >
               {copied ? (
                 <>
@@ -254,7 +254,7 @@ export function PdfViewerModal({
               href={pdfUrl}
               download={`${pub.title.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`}
               title="Download publication PDF"
-              className="inline-flex h-8 items-center gap-1.5 rounded-[5px] bg-[#59110B] hover:bg-[#400A06] text-white px-3.5 text-[12px] font-medium shadow-2xs transition-colors"
+              className="inline-flex h-8 items-center gap-1.5 rounded-[5px] bg-[#184E32] hover:bg-[#133F28] text-white px-3.5 text-[12px] font-medium shadow-2xs transition-colors"
             >
               <Download className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Download</span>
@@ -266,7 +266,7 @@ export function PdfViewerModal({
               target="_blank"
               rel="noopener noreferrer"
               title="Open raw PDF in new browser tab"
-              className="hidden lg:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E4DACB] bg-white text-[#78716C] hover:border-[#59110B] hover:text-[#1C1917] shadow-2xs transition-colors"
+              className="hidden lg:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E6DFD3] bg-white text-[#78716C] hover:border-[#184E32] hover:text-[#1C1917] shadow-2xs transition-colors"
             >
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
@@ -276,7 +276,7 @@ export function PdfViewerModal({
               type="button"
               onClick={() => setIsMaximized((v) => !v)}
               title={isMaximized ? 'Restore floating window' : 'Expand full screen'}
-              className="hidden sm:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E4DACB] bg-white text-[#78716C] hover:border-[#59110B] hover:text-[#1C1917] shadow-2xs transition-colors cursor-pointer"
+              className="hidden sm:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E6DFD3] bg-white text-[#78716C] hover:border-[#184E32] hover:text-[#1C1917] shadow-2xs transition-colors cursor-pointer"
             >
               {isMaximized ? (
                 <Minimize2 className="h-3.5 w-3.5" />
@@ -290,19 +290,19 @@ export function PdfViewerModal({
               type="button"
               onClick={handleReload}
               title="Reload document"
-              className="hidden sm:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E4DACB] bg-white text-[#78716C] hover:border-[#59110B] hover:text-[#1C1917] shadow-2xs transition-colors cursor-pointer"
+              className="hidden sm:flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E6DFD3] bg-white text-[#78716C] hover:border-[#184E32] hover:text-[#1C1917] shadow-2xs transition-colors cursor-pointer"
             >
               <RotateCw className="h-3.5 w-3.5" />
             </button>
 
-            <div className="h-5 w-[1px] bg-[#E4DACB] mx-0.5" />
+            <div className="h-5 w-[1px] bg-[#E6DFD3] mx-0.5" />
 
             {/* Close Button */}
             <button
               type="button"
               onClick={onClose}
               title="Close reader (Esc)"
-              className="flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E4DACB] bg-white text-[#78716C] hover:bg-[#F4ECE1] hover:text-[#1C1917] hover:border-[#59110B] shadow-2xs transition-colors cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-[5px] border border-[#E6DFD3] bg-white text-[#78716C] hover:bg-[#FAF7F0] hover:text-[#1C1917] hover:border-[#184E32] shadow-2xs transition-colors cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -325,7 +325,7 @@ export function PdfViewerModal({
               </div>
 
               <div className="flex items-center gap-2 text-[#7A5424] font-mono text-[12.5px] tracking-wide">
-                <RotateCw className="h-3.5 w-3.5 animate-spin text-[#59110B]" />
+                <RotateCw className="h-3.5 w-3.5 animate-spin text-[#184E32]" />
                 <span>Loading Research Report...</span>
               </div>
               <p className="mt-1 text-[12px] text-[#78716C] font-serif max-w-[360px] line-clamp-1">
@@ -348,41 +348,41 @@ export function PdfViewerModal({
 
         {/* BOTTOM PUBLICATION SWITCHER DRAWER (Light Theme) */}
         {allPubs.length > 0 && (
-          <footer className="relative z-20 border-t border-[#E4DACB] bg-[#FAF8F5]">
+          <footer className="relative z-20 border-t border-[#E6DFD3] bg-[#FAF7F0]">
             {/* Drawer Toggle Header */}
-            <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-[#FAF8F5] border-b border-[#E4DACB]/60">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-[#FAF7F0] border-b border-[#E6DFD3]/60">
               <button
                 type="button"
                 onClick={() => setIsDrawerOpen((v) => !v)}
-                className="group flex items-center gap-2 text-[12px] font-mono text-[#44403C] hover:text-[#59110B] transition-colors cursor-pointer"
+                className="group flex items-center gap-2 text-[12px] font-mono text-[#44403C] hover:text-[#184E32] transition-colors cursor-pointer"
               >
-                <BookOpen className="h-3.5 w-3.5 text-[#7A5424]" />
-                <span className="font-medium">
+                <BookOpen className="h-3.5 w-3.5 text-[#184E32]" />
+                <span className="font-semibold">
                   Directory ({allPubs.length} Publications)
                 </span>
-                <span className="text-[10.5px] text-[#78716C] group-hover:text-[#59110B]">
+                <span className="text-[10.5px] text-[#78716C] group-hover:text-[#184E32]">
                   {isDrawerOpen ? '▾ Hide Carousel' : '▸ Expand Carousel'}
                 </span>
               </button>
 
               <div className="flex items-center gap-2 text-[11px] font-mono text-[#78716C]">
                 <span className="hidden sm:inline">Navigate:</span>
-                <kbd className="hidden sm:inline rounded border border-[#E4DACB] bg-white px-1.5 py-0.5 text-[10px] text-[#44403C] shadow-2xs">
+                <kbd className="hidden sm:inline rounded border border-[#E6DFD3] bg-white px-1.5 py-0.5 text-[10px] text-[#44403C] shadow-2xs">
                   ←
                 </kbd>
-                <kbd className="hidden sm:inline rounded border border-[#E4DACB] bg-white px-1.5 py-0.5 text-[10px] text-[#44403C] shadow-2xs">
+                <kbd className="hidden sm:inline rounded border border-[#E6DFD3] bg-white px-1.5 py-0.5 text-[10px] text-[#44403C] shadow-2xs">
                   →
                 </kbd>
                 <span className="hidden sm:inline text-zinc-400">·</span>
                 <span className="hidden sm:inline">
-                  Press <kbd className="rounded border border-[#E4DACB] bg-white px-1 py-0.5 text-[10px] text-[#44403C] shadow-2xs">ESC</kbd> to close
+                  Press <kbd className="rounded border border-[#E6DFD3] bg-white px-1 py-0.5 text-[10px] text-[#44403C] shadow-2xs">ESC</kbd> to close
                 </span>
               </div>
             </div>
 
             {/* Collapsible Horizontal Strip of Publications */}
             {isDrawerOpen && (
-              <div className="p-3 sm:p-4 bg-[#F5EFE6] overflow-x-auto no-scrollbar animate-in slide-in-from-bottom-2 duration-200">
+              <div className="p-3 sm:p-4 bg-[#FAF7F0] overflow-x-auto no-scrollbar animate-in slide-in-from-bottom-2 duration-200">
                 <div className="flex items-center gap-3 min-w-max pb-1">
                   {allPubs.map((item) => {
                     const isActive = item.id === pub.id
@@ -398,10 +398,10 @@ export function PdfViewerModal({
                             onSelectPub(item)
                           }
                         }}
-                        className={`group relative flex items-center gap-2.5 rounded-[8px] border p-2 text-left transition-all cursor-pointer ${
+                        className={`group relative flex items-center gap-2.5 rounded-[4px] border p-2 text-left transition-all cursor-pointer ${
                           isActive
-                            ? 'border-[#59110B] bg-white shadow-sm ring-1 ring-[#59110B]/30'
-                            : 'border-[#E4DACB] bg-white/80 hover:bg-white hover:border-[#BFAFA0]'
+                            ? 'border-[#184E32] bg-white shadow-sm ring-1 ring-[#184E32]/30'
+                            : 'border-[#E6DFD3] bg-white/80 hover:bg-white hover:border-[#111418]'
                         }`}
                       >
                         {/* Mini Cover */}
@@ -418,14 +418,14 @@ export function PdfViewerModal({
                         {/* Info */}
                         <div className="w-[170px] sm:w-[200px]">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-mono text-[9px] font-semibold uppercase text-[#7A5424]">
+                            <span className="font-mono text-[9px] font-semibold uppercase text-[#184E32]">
                               {item.category}
                             </span>
                             <span className="font-mono text-[9px] text-[#78716C]">· {item.year}</span>
                           </div>
                           <h4
                             className={`mt-0.5 font-serif text-[12px] leading-tight line-clamp-1 ${
-                              isActive ? 'text-[#59110B] font-medium' : 'text-[#1C1917] group-hover:text-[#59110B]'
+                              isActive ? 'text-[#184E32] font-semibold' : 'text-[#111418] group-hover:text-[#184E32]'
                             }`}
                           >
                             {item.title}
@@ -436,7 +436,7 @@ export function PdfViewerModal({
                         </div>
 
                         {isActive && (
-                          <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#59110B] text-[8.5px] font-bold text-white shadow-xs">
+                          <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#184E32] text-[8.5px] font-bold text-white shadow-xs">
                             ✓
                           </div>
                         )}

@@ -2,172 +2,129 @@
 
 import Link from 'next/link'
 import type { Database } from '@/types/database'
+import { SidewaysWordReveal } from '@/components/animata/text/sideways-word-reveal'
+import { CardReveal } from '@/components/animata/container/card-reveal'
 
 type Event = Database['public']['Tables']['events']['Row']
 
 interface HomeFeaturedEventsProps {
-  events: Event[]
+  events?: Event[]
 }
 
-function parseEventDate(dateStr: string) {
-  const parts = dateStr.trim().split(/\s+/)
-  if (parts.length >= 2 && !isNaN(Number(parts[0]))) {
-    return {
-      day: parts[0],
-      month: parts[1].slice(0, 3).toUpperCase(),
-    }
-  }
-  const d = new Date(dateStr)
-  if (!isNaN(d.getTime())) {
-    return {
-      day: d.getDate().toString(),
-      month: d.toLocaleString('en-US', { month: 'short' }).toUpperCase(),
-    }
-  }
-  return { day: '15', month: 'MAR' }
-}
-
-export function HomeFeaturedEvents({ events }: HomeFeaturedEventsProps) {
+export function HomeFeaturedEvents({ events = [] }: HomeFeaturedEventsProps) {
+  // Use first upcoming event if dynamically present, else fall back to signature IFSA Forum design
   const upcomingEvents = events.filter((e) => e.is_upcoming)
-  const [leadEvent, ...restEvents] = upcomingEvents
+  const leadEvent = upcomingEvents[0]
+
+  const leadTitle = leadEvent?.title || 'IFSA Forum 2027'
+  const leadDesc =
+    leadEvent?.description ||
+    'Two-day signature finance summit bringing together 9,000+ NIT Trichy engineering minds, national competition finalists, top venture partners, and bulge-bracket leaders.'
+  const leadTag = leadEvent?.tag?.toUpperCase() || 'SIGNATURE FORUM'
 
   return (
-    <section className="border-b border-[#E4DACB] bg-[#FAF8F5] py-14 md:py-18">
-      <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
+    <section className="bg-[#FAF7F0] py-16 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-[1240px] px-5 sm:px-8 lg:px-10">
 
-        {/* Section Header */}
-        <div className="flex items-center justify-between pb-6 border-b border-[#E4DACB]">
-          <h2 className="font-serif text-[28px] sm:text-[34px] font-normal text-[#1C1917]">
-            Flagship Events &amp; Summits
-          </h2>
-          <Link
-            href="/events"
-            className="text-[13.5px] font-medium text-[#1C1917] transition-colors hover:text-[#59110B]"
-          >
-            All events →
-          </Link>
-        </div>
+        {/* ── Section Header ── */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div>
+            <SidewaysWordReveal
+              lines={['Flagship Events &', 'Summits']}
+              className="font-serif text-[42px] sm:text-[56px] md:text-[64px] font-black leading-[1.02] tracking-tight text-[#111418]"
+              accentBarClassName="mt-4 h-[5px] w-[72px] bg-[#CCA855]"
+            />
+          </div>
 
-        {upcomingEvents.length === 0 ? (
-          /* Empty state */
-          <div className="mt-6 rounded-[8px] border border-dashed border-[#BFAFA0] bg-white p-10 text-center">
-            <p className="font-serif text-[18px] text-[#1C1917]">
-              No upcoming events currently scheduled.
-            </p>
-            <p className="mt-1 text-[14px] text-[#78716C]">
-              New initiatives, national competitions, and executive masterclasses will be published
-              here.
-            </p>
+          <div className="sm:pt-6">
             <Link
               href="/events"
-              className="mt-4 inline-flex items-center gap-1.5 font-mono text-[12.5px] font-medium text-[#59110B] hover:underline"
+              className="font-sans text-[13px] sm:text-[14px] font-medium text-[#111418] underline underline-offset-4 hover:opacity-75 transition-opacity"
             >
-              <span>Explore past summits &amp; masterclasses archive</span>
-              <span>→</span>
+              All events →
             </Link>
           </div>
-        ) : (
-          <div className="mt-6 flex flex-col gap-4">
+        </div>
 
-            {/* ── Editorial lead card (first upcoming event) ── */}
-            {leadEvent && (() => {
-              const { day, month } = parseEventDate(leadEvent.date)
-              return (
-                <div className="group flex flex-col sm:flex-row items-start sm:items-center gap-6 rounded-[12px] border border-[#E4DACB] bg-white p-6 sm:p-7 shadow-xs transition-all hover:shadow-[0_8px_24px_-6px_rgba(89,17,11,0.10)] hover:border-[#59110B]/30">
+        {/* ── Events Grid ── */}
+        <div className="mt-10 sm:mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-                  {/* Large date badge */}
-                  <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-[10px] border-2 border-[#59110B] bg-[#59110B] text-center shadow-md">
-                    <span className="font-mono text-[12px] font-bold uppercase tracking-widest text-white/80">
-                      {month}
-                    </span>
-                    <span className="font-mono text-[32px] font-bold leading-none text-white">
-                      {day}
-                    </span>
-                  </div>
+          {/* Left Hero Event Card */}
+          <CardReveal index={0} threshold={0.12} className="lg:col-span-7 flex flex-col">
+            <div className="flex flex-col sm:flex-row border-2 border-[#111418] bg-white shadow-[6px_6px_0px_#111418] sm:shadow-[8px_8px_0px_#111418] overflow-hidden h-full">
+              {/* Left Date Block (Deep Emerald Forest) */}
+              <div className="w-full sm:w-[130px] md:w-[145px] shrink-0 flex flex-col items-center justify-center py-7 sm:py-0 px-4 text-center bg-[#154D38] select-none">
+                <span className="font-serif text-[42px] sm:text-[50px] font-black leading-none text-white tracking-tight">
+                  FEB
+                </span>
+                <span className="mt-1 font-mono text-[11px] sm:text-[12px] font-semibold tracking-[0.2em] text-[#F5D88B] uppercase">
+                  2027
+                </span>
+              </div>
 
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="inline-block rounded-full bg-[#F4ECE1] border border-[#E4DACB] px-2.5 py-0.5 font-mono text-[10.5px] font-medium uppercase tracking-wider text-[#7A5424]">
-                        {leadEvent.tag}
-                      </span>
-                      <span className="font-mono text-[10.5px] text-[#A8A29E] uppercase tracking-wider">
-                        Flagship
-                      </span>
-                    </div>
-                    <Link
-                      href="/events"
-                      className="block font-serif text-[22px] sm:text-[26px] font-normal leading-snug text-[#1C1917] transition-colors group-hover:text-[#59110B]"
-                    >
-                      {leadEvent.title}
-                    </Link>
-                    {leadEvent.description && (
-                      <p className="mt-1.5 text-[14px] leading-relaxed text-[#57534E] line-clamp-2">
-                        {leadEvent.description}
-                      </p>
-                    )}
-                  </div>
+              {/* Right Content */}
+              <div className="p-6 sm:p-8 flex flex-col justify-between flex-1 bg-white">
+                <div>
+                  <span className="inline-block bg-[#F5D88B] text-[#111418] font-sans text-[10px] sm:text-[10.5px] font-bold tracking-[0.08em] uppercase px-2.5 py-1 rounded-[2px]">
+                    {leadTag}
+                  </span>
 
-                  {/* Right CTA */}
+                  <h3 className="mt-3.5 font-serif text-[24px] sm:text-[28px] md:text-[31px] font-black leading-[1.12] tracking-tight text-[#111418]">
+                    {leadTitle}
+                  </h3>
+
+                  <p className="mt-3 text-[12.5px] sm:text-[13px] text-[#4A5568] leading-relaxed max-w-lg">
+                    {leadDesc}
+                  </p>
+                </div>
+
+                <div className="mt-6">
                   <Link
-                    href="/events"
-                    className="shrink-0 inline-flex h-10 items-center gap-2 rounded-[6px] bg-[#59110B] px-5 text-[13.5px] font-medium text-white shadow-sm transition-all hover:bg-[#400A06] hover:-translate-y-0.5"
+                    href="/events#ifsa-forum"
+                    className="inline-flex items-center gap-1.5 bg-[#111418] text-white text-[12px] font-semibold px-4 py-2 rounded-[2px] hover:bg-black transition-colors"
                   >
-                    Details →
+                    Explore Forum →
                   </Link>
                 </div>
-              )
-            })()}
-
-            {/* ── Remaining events — compact date-badge rows ── */}
-            {restEvents.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {restEvents.map((ev) => {
-                  const { day, month } = parseEventDate(ev.date)
-                  return (
-                    <div
-                      key={ev.id}
-                      className="group flex items-center justify-between rounded-[8px] border border-[#E4DACB] bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-sm"
-                    >
-                      <div className="flex items-center gap-4 min-w-0 flex-1">
-                        {/* Date badge */}
-                        <div className="flex h-13 w-13 shrink-0 flex-col items-center justify-center rounded-[6px] border border-[#781D1D] bg-white text-center shadow-2xs">
-                          <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#59110B]">
-                            {month}
-                          </span>
-                          <span className="font-mono text-[17px] font-bold leading-none text-[#59110B]">
-                            {day}
-                          </span>
-                        </div>
-
-                        {/* Title & tag */}
-                        <div className="min-w-0 flex-1 pr-2">
-                          <Link
-                            href="/events"
-                            className="block text-[15px] sm:text-[15.5px] font-medium text-[#1C1917] hover:text-[#59110B] transition-colors truncate"
-                          >
-                            {ev.title}
-                          </Link>
-                          <p className="mt-0.5 font-mono text-[11px] uppercase tracking-wider text-[#7A5424] truncate">
-                            {ev.tag}
-                          </p>
-                        </div>
-                      </div>
-
-                      <Link
-                        href="/events"
-                        className="shrink-0 ml-3 text-[13px] font-medium text-[#7A5424] hover:text-[#59110B] hover:underline"
-                      >
-                        Details
-                      </Link>
-                    </div>
-                  )
-                })}
               </div>
-            )}
+            </div>
+          </CardReveal>
 
+          {/* Right Stacked Secondary Cards */}
+          <div className="lg:col-span-5 flex flex-col gap-4 sm:gap-5 justify-between">
+            {/* Secondary Card 1: Workshop */}
+            <CardReveal index={1} threshold={0.12} className="flex-1 flex flex-col">
+              <Link
+                href="/events"
+                className="border border-[#E2E8F0] bg-white rounded-[6px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex flex-col justify-center h-full transition-all duration-200 hover:border-neutral-400"
+              >
+                <span className="font-sans text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] text-[#718096] uppercase">
+                  WORKSHOP
+                </span>
+                <h4 className="mt-3 font-serif text-[18px] sm:text-[20px] font-bold leading-snug text-[#111418]">
+                  Executive Financial Modeling Masterclass
+                </h4>
+              </Link>
+            </CardReveal>
+
+            {/* Secondary Card 2: Competition */}
+            <CardReveal index={2} threshold={0.12} className="flex-1 flex flex-col">
+              <Link
+                href="/events"
+                className="border border-[#E2E8F0] bg-white rounded-[6px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex flex-col justify-center h-full transition-all duration-200 hover:border-neutral-400"
+              >
+                <span className="font-sans text-[10px] sm:text-[11px] font-semibold tracking-[0.2em] text-[#718096] uppercase">
+                  COMPETITION
+                </span>
+                <h4 className="mt-3 font-serif text-[18px] sm:text-[20px] font-bold leading-snug text-[#111418]">
+                  M&amp;A Case Competition Prelims
+                </h4>
+              </Link>
+            </CardReveal>
           </div>
-        )}
+
+        </div>
+
       </div>
     </section>
   )

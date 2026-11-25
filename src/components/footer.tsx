@@ -16,11 +16,13 @@ const FOOT_COLS = [
       { label: 'Who we are', href: '/about' },
       { label: 'Mentors & Team', href: '/about#team' },
       { label: 'How to join', href: '/about#join' },
+      { label: 'Privacy Policy', href: '/privacy' },
     ],
   },
   {
     title: 'Partner',
     items: [
+      { label: 'Mandate Inquiry', href: '/partner' },
       { label: 'Ways to partner', href: '/clients' },
       { label: 'Sponsor an event', href: '/events' },
       { label: 'Recruit from campus', href: '/clients' },
@@ -43,29 +45,40 @@ const SOCIALS = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#E4DACB] bg-[#FAF8F5] pt-14 pb-10 md:pt-20">
+    <footer
+      className="border-t pt-14 pb-10 md:pt-20"
+      style={{ background: 'var(--background)', borderColor: 'var(--border)' }}
+    >
       <div className="mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 gap-10 pb-12 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand column */}
           <div className="sm:col-span-2">
             <div className="flex items-center gap-2.5">
               <Image
-                src="/icon.jpg"
+                src="/ifsa-favicon.png"
                 alt="IFSA NIT Trichy"
                 width={32}
                 height={32}
-                className="shrink-0 rounded-[6px] border border-[#E4DACB] object-cover"
+                className="shrink-0 border-2 object-cover"
+                style={{ borderColor: 'var(--foreground)', boxShadow: '2px 2px 0 0 var(--foreground)' }}
               />
-              <span className="font-serif text-[18px] font-normal text-[#1C1917]">
+              <span
+                className="font-serif text-[19px] font-bold"
+                style={{ color: 'var(--foreground)' }}
+              >
                 IFSA NIT Trichy
               </span>
             </div>
-            <p className="mt-3 max-w-[280px] text-[13.5px] leading-relaxed text-[#78716C]">
+            <p
+              className="mt-3 max-w-[280px] text-[13.5px] leading-relaxed"
+              style={{ color: 'var(--muted-foreground)' }}
+            >
               The 10th APAC chapter of the International Finance Students Association. Founded Dec 2, 2024 at NIT Trichy.
             </p>
             <a
               href="mailto:nittrichy@ifsa-network.com"
-              className="mt-2 inline-block text-[13.5px] font-medium text-[#59110B] transition-colors hover:text-[#400A06] hover:underline"
+              className="mt-2 inline-block text-[13.5px] font-semibold transition-colors hover:underline"
+              style={{ color: 'var(--primary)' }}
             >
               nittrichy@ifsa-network.com
             </a>
@@ -77,7 +90,13 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-[6px] border border-[#E4DACB] bg-white text-[#44403C] transition-all hover:border-[#59110B] hover:text-[#59110B]"
+                  className="flex h-9 w-9 items-center justify-center border-2 transition-all hover:-translate-y-0.5"
+                  style={{
+                    borderColor: 'var(--foreground)',
+                    background: 'var(--card)',
+                    color: 'var(--foreground)',
+                    boxShadow: 'var(--shadow-ledger-sm)',
+                  }}
                 >
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d={s.path} />
@@ -90,7 +109,10 @@ export function Footer() {
           {/* Link columns */}
           {FOOT_COLS.map((col) => (
             <div key={col.title}>
-              <p className="font-mono text-[11px] font-medium tracking-[0.14em] uppercase text-[#7A5424]">
+              <p
+                className="font-mono text-[11px] font-bold tracking-[0.14em] uppercase"
+                style={{ color: 'var(--accent)' }}
+              >
                 {col.title}
               </p>
               <ul className="mt-4 flex flex-col gap-2.5 list-none p-0 m-0">
@@ -98,7 +120,8 @@ export function Footer() {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="text-[14px] text-[#44403C] transition-colors hover:text-[#59110B]"
+                      className="text-[14px] transition-colors hover:opacity-75"
+                      style={{ color: 'var(--foreground)' }}
                     >
                       {item.label}
                     </Link>
@@ -110,8 +133,17 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col flex-wrap justify-between gap-3 border-t border-[#E4DACB] pt-6 sm:flex-row text-[13px] text-[#78716C]">
-          <p>© {new Date().getFullYear()} IFSA NIT Trichy · Ambition Meets Impact.</p>
+        <div
+          className="flex flex-col flex-wrap justify-between gap-3 border-t pt-6 sm:flex-row text-[13px]"
+          style={{ borderColor: 'var(--border)', color: 'var(--muted-foreground)' }}
+        >
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <p>© {new Date().getFullYear()} IFSA NIT Trichy · Ambition Meets Impact.</p>
+            <span>·</span>
+            <Link href="/privacy" className="hover:underline transition-colors text-inherit">
+              Privacy Policy
+            </Link>
+          </div>
           <p>10th APAC Chapter · In strategic partnership with Wall Street Oasis (WSO)</p>
         </div>
       </div>

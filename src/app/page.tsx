@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import { HomeHero } from '@/components/home/hero'
+import { HomeMarquee } from '@/components/home/marquee'
 import { HomeStats } from '@/components/home/stats'
 import { HomeAchievements } from '@/components/home/achievements'
 import { HomeFeaturedEvents } from '@/components/home/featured-events'
+import { HomePartnerCta } from '@/components/home/partner-cta'
 import { HomeFeaturedPubs } from '@/components/home/featured-pubs'
+import { HomeAlumniPlacements } from '@/components/home/alumni-placements'
 import { HomeClients } from '@/components/home/clients'
 import { FALLBACK_EVENTS, FALLBACK_PUBLICATIONS } from '@/lib/fallback-data'
 import type { Database } from '@/types/database'
@@ -86,11 +89,14 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
       <HomeHero />
-      <HomeClients />
+      <HomeMarquee />
       <HomeStats />
-      <HomeAchievements />
       <HomeFeaturedPubs pubs={resolvedPubs} />
+      <HomeAlumniPlacements />
+      <HomeClients />
+      <HomeAchievements />
       <HomeFeaturedEvents events={upcomingEvents} />
+      <HomePartnerCta />
     </>
   )
 }

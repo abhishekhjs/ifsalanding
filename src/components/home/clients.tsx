@@ -1,538 +1,599 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SidewaysWordReveal } from '@/components/animata/text/sideways-word-reveal'
+import { CardReveal } from '@/components/animata/container/card-reveal'
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  animate,
+  useMotionValueEvent,
+  type PanInfo,
+  type MotionValue,
+} from 'motion/react'
 
-gsap.registerPlugin(ScrollTrigger)
-
-type MandateCategory = 'all' | 'live' | 'fintech' | 'climate' | 'venture'
-
-interface ClientPartner {
+interface ClientMandate {
+  num: string
   id: string
   name: string
-  badge: 'Live Mandate' | 'Completed Mandate'
+  badge: 'LIVE' | 'COMPLETED'
   category: 'fintech' | 'climate' | 'venture'
   domain: string
-  tagline: string
+  scope: string
   logo: string
-  statMetric?: string
-  statLabel?: string
 }
 
-const CLIENT_PARTNERS: ClientPartner[] = [
-  // 3 Live Active Mandates
+const CLIENT_MANDATES: ClientMandate[] = [
   {
+    num: '01',
     id: 'varicash',
     name: 'Varicash',
-    badge: 'Live Mandate',
+    badge: 'LIVE',
     category: 'fintech',
-    domain: 'Fintech & Lending',
-    tagline: 'Loan Against Mutual Funds (LAMF) Rails',
+    domain: 'FINTECH & LENDING',
+    scope: 'Loan Against Mutual Funds (LAMF) Rails',
     logo: '/varicash-logo.png',
-    statMetric: 'Active Rail',
-    statLabel: 'Fintech Infrastructure',
   },
   {
+    num: '02',
     id: 'climate-b',
     name: 'Climate B Venture',
-    badge: 'Live Mandate',
+    badge: 'LIVE',
     category: 'climate',
-    domain: 'Climate & ESG Analytics',
-    tagline: 'Physical & Transition Risk Modeling',
+    domain: 'CLIMATE & ESG ANALYTICS',
+    scope: 'Physical & Transition Risk Modeling',
     logo: '/climate-b-logo.png',
-    statMetric: 'Live Mandate',
-    statLabel: 'Scenario Analytics',
   },
   {
+    num: '03',
     id: 'mymfd',
     name: 'myMFD',
-    badge: 'Live Mandate',
+    badge: 'LIVE',
     category: 'fintech',
-    domain: 'WealthTech & SaaS',
-    tagline: 'Digital Operating System for MFDs',
+    domain: 'WEALTHTECH & SAAS',
+    scope: 'Digital Operating System for MFDs',
     logo: '/mymfd-logo.png',
-    statMetric: 'Live Mandate',
-    statLabel: 'Wealth Operating OS',
   },
-  // 6 Completed Mandates
   {
+    num: '04',
     id: 'carbon6',
     name: 'Carbon6',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'climate',
-    domain: 'Climate Finance & ESG',
-    tagline: 'EU ETS vs. India PAT Framework',
+    domain: 'CLIMATE FINANCE & ESG',
+    scope: 'EU ETS vs. India PAT Framework',
     logo: '/carbon6-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'Policy Benchmarking',
   },
   {
+    num: '05',
     id: 'spotlight',
     name: 'Spotlight Partners',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'venture',
-    domain: 'Venture Capital & Valuation',
-    tagline: 'Startup Valuation & LTV/CAC',
+    domain: 'VENTURE CAPITAL & VALUATION',
+    scope: 'Startup Valuation & LTV/CAC Cohorts',
     logo: '/spotlight-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'Cohort Modeling',
   },
   {
+    num: '06',
     id: 'venturewolf',
     name: 'VentureWolf',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'venture',
-    domain: 'Corporate Debt Advisory',
-    tagline: 'MSME Hybrid Debt & Mezzanine',
+    domain: 'CORPORATE DEBT ADVISORY',
+    scope: 'MSME Hybrid Debt & Mezzanine Rails',
     logo: '/venturewolf-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'Structure Advisory',
   },
   {
+    num: '07',
     id: 'infisum',
     name: 'Infisum Inc.',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'venture',
-    domain: 'International Tax & Policy',
-    tagline: 'UAE Corporate & R&D Tax Credit',
+    domain: 'INTERNATIONAL TAX & POLICY',
+    scope: 'UAE Corporate & R&D Tax Credit Rails',
     logo: '/infisum-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'Cross-Border Tax',
   },
   {
+    num: '08',
     id: 'cosmo',
     name: 'Cosmo Health',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'venture',
-    domain: 'Healthcare Intelligence',
-    tagline: 'Digital Health TAM & Unit Economics',
+    domain: 'CARE INTELLIGENCE',
+    scope: 'Digital Health TAM & Unit Economics',
     logo: '/cosmo-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'TAM / Unit Model',
   },
   {
+    num: '09',
     id: 'fundcapita',
     name: 'FundCapita',
-    badge: 'Completed Mandate',
+    badge: 'COMPLETED',
     category: 'fintech',
-    domain: 'Fintech Syndication',
-    tagline: 'Early-Stage Venture Platform GTM',
+    domain: 'FINTECH SYNDICATION',
+    scope: 'Early-Stage Venture Platform GTM',
     logo: '/fundcapita-framed.png',
-    statMetric: 'Delivered',
-    statLabel: 'Syndicate Strategy',
   },
 ]
 
-const CORPORATE_LOGOS = [
-  { name: 'EY', src: '/ey-framed.png' },
-  { name: 'ZS Associates', src: '/zs-framed.png' },
-  { name: 'SBI Funds', src: '/sbi-framed.png' },
-  { name: 'Pernod Ricard', src: '/pernod-framed.png' },
-  { name: 'Microsoft', src: '/microsoft-framed.png' },
-  { name: 'Novartis', src: '/novartis-framed.png' },
-  { name: 'P&G', src: '/pg-framed.png' },
-]
+interface CarouselItemProps {
+  index: number
+  item: ClientMandate
+  rotation: MotionValue<number>
+  spacing: number
+  totalArc: number
+  radius: number
+  isMobile: boolean
+  onSelect: (angle: number) => void
+}
 
-const FILTER_TABS: { label: string; value: MandateCategory; count: number }[] = [
-  { label: 'All Mandates', value: 'all', count: 9 },
-  { label: 'Active Live', value: 'live', count: 3 },
-  { label: 'Fintech & SaaS', value: 'fintech', count: 3 },
-  { label: 'Climate & ESG', value: 'climate', count: 2 },
-  { label: 'Valuation & Advisory', value: 'venture', count: 4 },
-]
-
-export function HomeClients() {
-  const [activeFilter, setActiveFilter] = useState<MandateCategory>('all')
-  const sectionRef = useRef<HTMLElement>(null)
-  const cardsGridRef = useRef<HTMLDivElement>(null)
-  const cardElementsRef = useRef<(HTMLDivElement | null)[]>([])
-  const marqueeTrackRef = useRef<HTMLDivElement>(null)
-
-  const repeatedLogos = [...CORPORATE_LOGOS, ...CORPORATE_LOGOS, ...CORPORATE_LOGOS]
-
-  // Filter logic
-  const filteredMandates = CLIENT_PARTNERS.filter((mandate) => {
-    if (activeFilter === 'all') return true
-    if (activeFilter === 'live') return mandate.badge === 'Live Mandate'
-    return mandate.category === activeFilter
+function CarouselCard({
+  index,
+  item,
+  rotation,
+  spacing,
+  totalArc,
+  radius,
+  isMobile,
+  onSelect,
+}: CarouselItemProps) {
+  const rawAngle = useTransform(rotation, (r) => index * spacing + r)
+  const adjustedAngle = useTransform(rawAngle, (angle) => {
+    let wrapped = angle % totalArc
+    if (wrapped > totalArc / 2) wrapped -= totalArc
+    if (wrapped < -totalArc / 2) wrapped += totalArc
+    return wrapped
   })
 
-  // GSAP 3D Scroll Reveal, Column Parallax & Lenis Inertia Link
+  // Visibility and fade buffers — widened so cards remain fully visible without edge cut-off
+  const opacity = useTransform(adjustedAngle, (angle) => {
+    const abs = Math.abs(angle)
+    const cutOff = isMobile ? 38 : 52
+    if (abs > cutOff) return 0
+    if (abs > cutOff - 8) return (cutOff - abs) / 8
+    return 1
+  })
+
+  const zIndex = useTransform(adjustedAngle, (val) => Math.round(1000 - Math.abs(val) * 10))
+
+  const scale = useTransform(adjustedAngle, (angle) => {
+    const abs = Math.abs(angle)
+    return Math.max(0.86, 1 - (abs / 50) * 0.14)
+  })
+
+  // Dynamic cross-fade between active elevated midnight card and inactive paper dossier
+  const activeOpacity = useTransform(
+    adjustedAngle,
+    [-spacing * 0.55, 0, spacing * 0.55],
+    [0, 1, 0]
+  )
+  const inactiveOpacity = useTransform(
+    adjustedAngle,
+    [-spacing * 0.55, 0, spacing * 0.55],
+    [1, 0, 1]
+  )
+
+  const startX = useRef(0)
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    startX.current = e.clientX
+  }
+
+  const handleClickCapture = (e: React.MouseEvent) => {
+    const dist = Math.abs(e.clientX - startX.current)
+    if (dist > 6) {
+      e.preventDefault()
+      e.stopPropagation()
+      return
+    }
+    const angle = adjustedAngle.get()
+    onSelect(angle)
+  }
+
+  return (
+    <motion.div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '46%',
+        x: '-50%',
+        y: '-50%',
+        rotate: adjustedAngle,
+        transformOrigin: `center ${radius}px`,
+        opacity,
+        zIndex,
+        scale,
+        willChange: 'transform, opacity',
+      }}
+      className="w-[260px] sm:w-[305px] h-[345px] sm:h-[390px]"
+    >
+      <div
+        onPointerDown={handlePointerDown}
+        onClickCapture={handleClickCapture}
+        className="relative w-full h-full select-none cursor-pointer rounded-[20px] overflow-hidden"
+        style={{ touchAction: 'none' }}
+      >
+        {/* Layer 1: Inactive White Paper Dossier */}
+        <motion.div
+          style={{ opacity: inactiveOpacity }}
+          className="absolute inset-0 bg-white text-[#111418] border border-[#111418]/25 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:border-[#111418]/50 transition-colors p-6 sm:p-7 flex flex-col justify-between rounded-[20px]"
+        >
+          {/* Top Row: domain and badge */}
+          <div className="flex items-center justify-between text-[10px] sm:text-[10.5px] font-mono tracking-wider uppercase w-full">
+            <span className="text-[#7A746C] font-semibold truncate max-w-[145px]">
+              {item.domain}
+            </span>
+            {item.badge === 'LIVE' ? (
+              <span className="inline-flex items-center gap-1 font-bold text-[#FF5252]">
+                <span className="h-1 w-1 rounded-full bg-[#FF5252]" />
+                LIVE
+              </span>
+            ) : (
+              <span className="text-[#8A847C]">COMPLETED</span>
+            )}
+          </div>
+
+          {/* Middle Section: Centered & Middle-Aligned */}
+          <div className="flex-1 my-auto flex flex-col items-center justify-center text-center py-2 w-full">
+            {/* Clean Company Logo Stage: Centered & Middle-Aligned */}
+            <div className="relative mb-3.5 sm:mb-4 h-12 sm:h-14 w-full px-3 py-1.5 bg-[#FAF7F0] rounded-[10px] border border-[#E6DFD3] flex items-center justify-center">
+              <Image
+                src={item.logo}
+                alt={`${item.name} logo`}
+                width={140}
+                height={44}
+                className="max-h-full max-w-[135px] sm:max-w-[150px] w-auto h-auto object-contain"
+              />
+            </div>
+
+            <h3 className="font-serif font-bold text-[20px] sm:text-[23px] text-[#111418] tracking-tight leading-tight text-center">
+              {item.name}
+            </h3>
+            <p className="font-sans text-[11px] sm:text-[12px] text-[#666055] mt-1.5 leading-relaxed line-clamp-2 text-center max-w-[240px]">
+              {item.scope}
+            </p>
+          </div>
+
+          {/* Bottom Row: Centered Number Watermark */}
+          <div className="pt-2 flex items-center justify-center w-full">
+            <span className="font-serif font-black text-[44px] sm:text-[54px] leading-none text-[#E8E2D6] select-none block text-center">
+              {item.num}
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Layer 2: Active Elevated Midnight Card */}
+        <motion.div
+          style={{ opacity: activeOpacity }}
+          className="absolute inset-0 bg-[#111418] text-[#FAF7F0] border border-[#111418] shadow-[0_22px_55px_rgba(0,0,0,0.4)] ring-1 ring-black/10 p-6 sm:p-7 flex flex-col justify-between rounded-[20px]"
+        >
+          {/* Top Row: domain and badge */}
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono tracking-wider uppercase w-full">
+            <span className="text-[#A5A196] font-semibold">{item.domain}</span>
+            {item.badge === 'LIVE' ? (
+              <span className="inline-flex items-center gap-1.5 font-bold text-[#FF5252]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FF5252] animate-pulse" />
+                LIVE
+              </span>
+            ) : (
+              <span className="text-[#A5A196]">COMPLETED</span>
+            )}
+          </div>
+
+          {/* Middle Section: Centered & Middle-Aligned */}
+          <div className="flex-1 my-auto flex flex-col items-center justify-center text-center py-2 w-full">
+            {/* High-Contrast Clean Logo Stage: Centered & Middle-Aligned */}
+            <div className="relative mb-3.5 sm:mb-4 h-12 sm:h-14 w-full px-3 py-1.5 bg-white rounded-[10px] border border-white/20 shadow-sm flex items-center justify-center">
+              <Image
+                src={item.logo}
+                alt={`${item.name} logo`}
+                width={140}
+                height={44}
+                className="max-h-full max-w-[135px] sm:max-w-[150px] w-auto h-auto object-contain"
+              />
+            </div>
+
+            <h3 className="font-serif font-black text-[23px] sm:text-[27px] text-[#FAF7F0] tracking-tight leading-tight text-center">
+              {item.name}
+            </h3>
+            <p className="font-sans text-[11.5px] sm:text-[12.5px] text-[#C5C0B6] mt-1.5 leading-relaxed line-clamp-2 text-center max-w-[240px]">
+              {item.scope}
+            </p>
+          </div>
+
+          {/* Bottom Row: Centered View Details CTA */}
+          <div className="pt-2 w-full">
+            <Link
+              href="/clients"
+              className="group w-full py-3 sm:py-3.5 px-5 bg-[#CBA258] hover:bg-[#D4AC5F] active:bg-[#C0964D] text-[#111418] font-mono text-[11px] sm:text-[12px] font-bold tracking-[0.12em] uppercase rounded-[10px] flex items-center justify-center gap-2 transition-all duration-200 shadow-md hover:shadow-lg hover:brightness-105 active:scale-[0.99]"
+            >
+              <span>View Details</span>
+              <span className="text-[15px] font-bold transition-transform duration-200 group-hover:translate-x-1.5">
+                &rarr;
+              </span>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
+
+export function HomeClients() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isInView, setIsInView] = useState(true)
+  const [cursor, setCursor] = useState<'grab' | 'grabbing'>('grab')
+  const isDragging = useRef(false)
+  const isHoveredRef = useRef(false)
+  const wheelLockRef = useRef(false)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // Framer Arc Carousel Parameters
+  const spacing = isMobile ? 12 : 10
+  const radius = isMobile ? 850 : 1150
+
+  // Loop Construction (matching Framer template)
+  const MIN_DEGREES = 240
+  const filledItems = useMemo(() => {
+    const list: ClientMandate[] = []
+    while (list.length * spacing < MIN_DEGREES * 2.2) {
+      list.push(...CLIENT_MANDATES)
+    }
+    if (list.length === CLIENT_MANDATES.length) {
+      list.push(...CLIENT_MANDATES)
+    }
+    return list
+  }, [spacing])
+
+  const totalArc = filledItems.length * spacing
+
+  // Motion System
+  const rotation = useMotionValue(0)
+  const smoothRotation = useSpring(rotation, { stiffness: 160, damping: 28, mass: 0.9 })
+
+  // Listen to rotation changes to sync active index for bottom dots
+  useMotionValueEvent(rotation, 'change', (latest) => {
+    const stepIndex = Math.round(-latest / spacing)
+    const normalized =
+      ((stepIndex % CLIENT_MANDATES.length) + CLIENT_MANDATES.length) % CLIENT_MANDATES.length
+    setActiveIndex(normalized)
+  })
+
+  // Window resize check
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion || !sectionRef.current || !cardsGridRef.current) return
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
-    const section = sectionRef.current
-    const cardsGrid = cardsGridRef.current
+  // Pan / Drag handlers
+  const onPanStart = () => {
+    isDragging.current = true
+    setCursor('grabbing')
+    rotation.stop()
+  }
 
-    const ctx = gsap.context(() => {
-      const cards = cardElementsRef.current.filter(Boolean) as HTMLDivElement[]
+  const onPan = (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const sensitivity = isMobile ? 8 : 11
+    const deltaAngle = info.delta.x / sensitivity
+    rotation.set(rotation.get() + deltaAngle)
+  }
 
-      // 1. Initial 3D Spatial Deck Entrance
-      gsap.fromTo(
-        cards,
-        {
-          opacity: 0,
-          y: 50,
-          scale: 0.93,
-          rotateX: 14,
-          transformPerspective: 1200,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          stagger: {
-            each: 0.07,
-            from: 'start',
-          },
-          duration: 0.85,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: cardsGrid,
-            start: 'top 82%',
-            once: true,
-          },
-        }
-      )
+  const onPanEnd = (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    isDragging.current = false
+    setCursor('grab')
+    const velocity = info.velocity.x
+    const currentRot = rotation.get()
+    const velocityAngle = velocity / 120
+    const predicted = currentRot + velocityAngle * 0.28
+    const targetIndex = Math.round(predicted / spacing)
+    const snapRotation = targetIndex * spacing
 
+    animate(rotation, snapRotation, {
+      type: 'spring',
+      stiffness: 85,
+      damping: 22,
+      mass: 1,
+    })
+  }
 
+  // Snap to card clicked
+  const handleSelectCard = useCallback(
+    (cardAngle: number) => {
+      if (Math.abs(cardAngle) < 1.5) return
+      const currentRot = rotation.get()
+      const targetRot = Math.round((currentRot - cardAngle) / spacing) * spacing
+      animate(rotation, targetRot, {
+        type: 'spring',
+        stiffness: 90,
+        damping: 22,
+        mass: 1,
+      })
+    },
+    [rotation, spacing]
+  )
 
-      // 3. Lenis Velocity Inertia Response: organic liquid skew during rapid smooth scroll
-      const lenis = (window as unknown as { __lenis?: { on: (event: string, callback: (e: { velocity: number }) => void) => void } }).__lenis
-      if (lenis && typeof lenis.on === 'function') {
-        const handleScroll = ({ velocity }: { velocity: number }) => {
-          const clampedSkew = gsap.utils.clamp(-1.5, 1.5, velocity * 0.06)
-          gsap.to(cardsGrid, {
-            skewY: clampedSkew,
-            duration: 0.25,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          })
-        }
-        lenis.on('scroll', handleScroll)
+  // Step Next / Prev
+  const handleStep = useCallback(
+    (direction: number) => {
+      const currentRot = rotation.get()
+      const targetIndex = Math.round(currentRot / spacing) - direction
+      const targetRot = targetIndex * spacing
+      animate(rotation, targetRot, {
+        type: 'spring',
+        stiffness: 90,
+        damping: 22,
+        mass: 1,
+      })
+    },
+    [rotation, spacing]
+  )
+
+  // Dot Click Navigation (shortest path on circular track)
+  const handleDotClick = useCallback(
+    (targetIdx: number) => {
+      const total = CLIENT_MANDATES.length
+      if (total === 0) return
+      const currentRot = rotation.get()
+      const currentStep = Math.round(-currentRot / spacing)
+      const currentNorm = ((currentStep % total) + total) % total
+      let diff = targetIdx - currentNorm
+      if (diff > total / 2) diff -= total
+      if (diff < -total / 2) diff += total
+      const targetStep = currentStep + diff
+      const targetRot = -targetStep * spacing
+
+      animate(rotation, targetRot, {
+        type: 'spring',
+        stiffness: 90,
+        damping: 22,
+        mass: 1,
+      })
+    },
+    [rotation, spacing]
+  )
+
+  // Wheel Flip (horizontal & vertical)
+  const handleWheel = useCallback(
+    (e: React.WheelEvent) => {
+      if (Math.abs(e.deltaY) > 15 || Math.abs(e.deltaX) > 15) {
+        if (wheelLockRef.current) return
+        wheelLockRef.current = true
+        const dir = e.deltaY > 0 || e.deltaX > 0 ? 1 : -1
+        handleStep(dir)
+        setTimeout(() => {
+          wheelLockRef.current = false
+        }, 280)
       }
-    }, section)
+    },
+    [handleStep]
+  )
 
-    return () => ctx.revert()
-  }, [activeFilter])
-
-  // Interactive 3D Holographic Card Tilt & Cursor Spotlight
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    const card = cardElementsRef.current[index]
-    if (!card) return
-
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-
-    const rotateX = ((y - centerY) / centerY) * -7
-    const rotateY = ((x - centerX) / centerX) * 8
-
-    // Update CSS variables for high-performance cursor spotlight sheen
-    card.style.setProperty('--spotlight-x', `${(x / rect.width) * 100}%`)
-    card.style.setProperty('--spotlight-y', `${(y / rect.height) * 100}%`)
-    card.style.setProperty('--spotlight-opacity', '1')
-
-    gsap.to(card, {
-      rotateX,
-      rotateY,
-      z: 14,
-      scale: 1.018,
-      duration: 0.28,
-      ease: 'power2.out',
-      transformPerspective: 1000,
-      overwrite: 'auto',
-    })
+  // Intersection Observer for viewport visibility
+  useEffect(() => {
+    if (!sectionRef.current) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(sectionRef.current)
+    return () => observer.disconnect()
   }, [])
 
-  const handleMouseLeave = useCallback((index: number) => {
-    const card = cardElementsRef.current[index]
-    if (!card) return
+  // Automatic Card Change with Delay (Autoplay)
+  useEffect(() => {
+    if (!isInView || CLIENT_MANDATES.length <= 1) return
 
-    card.style.setProperty('--spotlight-opacity', '0')
+    const AUTOPLAY_DELAY_MS = 3800
 
-    gsap.to(card, {
-      rotateX: 0,
-      rotateY: 0,
-      z: 0,
-      scale: 1,
-      duration: 0.55,
-      ease: 'power3.out',
-      overwrite: 'auto',
-    })
-  }, [])
+    const timer = setInterval(() => {
+      if (isHoveredRef.current || isDragging.current || document.hidden) return
+      handleStep(1)
+    }, AUTOPLAY_DELAY_MS)
+
+    return () => clearInterval(timer)
+  }, [handleStep, isInView])
+
+  // Keyboard Navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') handleStep(1)
+      if (e.key === 'ArrowLeft') handleStep(-1)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleStep])
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-b border-[#E4DACB] bg-[#FAF8F5] py-16 md:py-24"
+      className="relative overflow-hidden bg-[#FAF7F0] text-[#111418] py-20 sm:py-28 border-b border-[#111418]/15"
     >
-      {/* Subtle institutional parchment grain background texture */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage: `radial-gradient(#1C1917 1px, transparent 1px)`,
-          backgroundSize: '24px 24px',
-        }}
-      />
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        {/* Header Block */}
+        <div className="max-w-3xl">
+          <SidewaysWordReveal
+            lines={['Trusted by', 'High-Growth Ventures', '& Industry Leaders']}
+            className="font-serif font-black tracking-[-0.03em] text-[#111418] leading-[0.94] text-[42px] sm:text-[56px] md:text-[68px]"
+            accentBarClassName="h-[4px] w-20 bg-[#CBA258] mt-5 mb-5"
+          />
 
-      <div className="relative mx-auto max-w-[1280px] px-5 sm:px-8 lg:px-12 text-center">
-        {/* Top Header: Alumni Placements */}
-        <div className="max-w-2xl mx-auto">
-          <h2 className="font-serif text-[28px] font-normal tracking-tight text-[#1C1917] sm:text-[34px]">
-            Our Alumni Are Placed At
-          </h2>
-          <p className="mt-2 text-[14px] text-[#78716C]">
-            Direct institutional recruitment across tier-1 investment banking, global consulting, and sovereign asset managers.
+          {/* Subtitle */}
+          <p className="font-sans text-[14px] sm:text-[15.5px] leading-relaxed text-[#555048] max-w-2xl">
+            Our analysts execute active credit modeling, climate analytics, and digital operating
+            architecture alongside delivered institutional corporate mandates.
           </p>
         </div>
 
-        {/* Dynamic auto-scrolling company logos ribbon */}
-        <div className="relative mt-8 overflow-hidden">
-          {/* Gradient edge masks */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 sm:w-40 bg-gradient-to-r from-[#FAF8F5] to-transparent" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 sm:w-40 bg-gradient-to-l from-[#FAF8F5] to-transparent" />
-
-          {/* Scrolling track */}
+        {/* Framer Arc Carousel Stage — bottom clipped cleanly, sides completely visible */}
+        <CardReveal threshold={0.12} index={0}>
           <div
-            ref={marqueeTrackRef}
-            className="flex w-max items-center gap-6 sm:gap-7 py-3 animate-[partner-scroll_32s_linear_infinite]"
+            onWheel={handleWheel}
+            onMouseEnter={() => {
+              isHoveredRef.current = true
+            }}
+            onMouseLeave={() => {
+              isHoveredRef.current = false
+            }}
+            style={{
+              perspective: '1200px',
+              clipPath: 'inset(-300px -100vw 0px -100vw)',
+            }}
+            className="relative h-[430px] sm:h-[480px] w-full overflow-visible mt-8 sm:mt-12 select-none flex items-center justify-center outline-none"
           >
-            {repeatedLogos.map((partner, idx) => (
-              <div
+            <motion.div
+              style={{ cursor }}
+              onPanStart={onPanStart}
+              onPan={onPan}
+              onPanEnd={onPanEnd}
+              className="relative w-full h-full flex items-center justify-center touch-none pointer-events-auto overflow-visible"
+            >
+              {filledItems.map((item, index) => (
+                <CarouselCard
+                  key={`${item.id}-${index}`}
+                  index={index}
+                  item={item}
+                  rotation={smoothRotation}
+                  spacing={spacing}
+                  totalArc={totalArc}
+                  radius={radius}
+                  isMobile={isMobile}
+                  onSelect={handleSelectCard}
+                />
+              ))}
+            </motion.div>
+          </div>
+        </CardReveal>
+
+        {/* Bottom Pagination Dots */}
+        <div className="mt-6 pt-6 border-t border-[#111418]/15 flex items-center justify-center">
+          <div className="flex items-center gap-1.5">
+            {CLIENT_MANDATES.map((_, idx) => (
+              <button
                 key={idx}
-                className="flex aspect-[2.9/1] h-18 sm:h-22 shrink-0 items-center justify-center rounded-[10px] sm:rounded-[12px] border border-[#E4DACB] bg-white p-3 sm:p-4 shadow-xs transition-transform duration-300 hover:scale-105 hover:border-[#59110B]/40"
-              >
-                <div className="relative flex h-full w-full items-center justify-center">
-                  <Image
-                    src={partner.src}
-                    alt={`${partner.name} logo - IFSA NIT Trichy alumni employer`}
-                    width={260}
-                    height={80}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-              </div>
+                type="button"
+                onClick={() => handleDotClick(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
+                  idx === activeIndex
+                    ? 'w-6 bg-[#111418]'
+                    : 'w-1.5 bg-[#111418]/25 hover:bg-[#111418]/60'
+                }`}
+              />
             ))}
           </div>
         </div>
-
-        {/* Elegant hairline separator */}
-        <div className="my-16 mx-auto flex items-center justify-center gap-3">
-          <div className="h-[1px] w-20 bg-[#E4DACB]" />
-          <span className="font-serif italic text-[14px] text-[#78716C]">Institutional Advisory</span>
-          <div className="h-[1px] w-20 bg-[#E4DACB]" />
-        </div>
-
-        {/* Section Headline */}
-        <div className="max-w-3xl mx-auto">
-          <h3 className="font-serif text-[28px] font-normal tracking-tight text-[#1C1917] sm:text-[36px]">
-            Trusted by High-Growth Ventures &amp; Industry Leaders
-          </h3>
-          <p className="mx-auto mt-3 max-w-[66ch] text-[15px] leading-relaxed text-[#44403C]">
-            Our analysts execute active credit modeling, climate analytics, and digital operating architecture alongside delivered institutional corporate mandates.
-          </p>
-        </div>
-
-        {/* Interactive Filter Pills */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-          {FILTER_TABS.map((tab) => {
-            const isActive = activeFilter === tab.value
-            return (
-              <button
-                key={tab.value}
-                type="button"
-                onClick={() => setActiveFilter(tab.value)}
-                className={`relative inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[12.5px] font-medium transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? 'bg-[#1C1917] text-[#FAF8F5] shadow-xs'
-                    : 'bg-white border border-[#E4DACB] text-[#57534E] hover:border-[#59110B] hover:text-[#1C1917]'
-                }`}
-              >
-                {tab.value === 'live' && (
-                  <span className="relative flex h-2 w-2 mr-0.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B6F38] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1B6F38]" />
-                  </span>
-                )}
-                <span>{tab.label}</span>
-                <span
-                  className={`ml-1 text-[11px] ${
-                    isActive ? 'text-[#FAF8F5]/70' : 'text-[#78716C]'
-                  }`}
-                >
-                  ({tab.count})
-                </span>
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Client Partner Big Logo Tiles Grid — wraps in dark band when "live" tab is active */}
-        <div
-          className={`mt-10 rounded-[16px] px-4 pt-6 pb-8 sm:px-6 lg:px-8 transition-colors duration-500 ${
-            activeFilter === 'live'
-              ? 'bg-[#0B0F19] ring-1 ring-white/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.5)]'
-              : 'bg-transparent'
-          }`}
-        >
-          {/* "Live" tab header — only shown when dark band is active */}
-          {activeFilter === 'live' && (
-            <div className="mb-6 flex items-center gap-2.5">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
-              </span>
-              <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.15em] text-white/70">
-                Active Live Mandates — 3 Ongoing
-              </span>
-            </div>
-          )}
-
-        <div
-          ref={cardsGridRef}
-          style={{ perspective: 1200 }}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 [transform-style:preserve-3d]"
-        >
-          {filteredMandates.map((client, idx) => {
-            const isLive = client.badge === 'Live Mandate'
-
-            return (
-              <div
-                key={client.id}
-                ref={(el) => {
-                  cardElementsRef.current[idx] = el
-                }}
-                onMouseMove={(e) => handleMouseMove(e, idx)}
-                onMouseLeave={() => handleMouseLeave(idx)}
-                className="group relative flex flex-col justify-between rounded-[12px] border bg-white p-6 text-left shadow-[0_2px_8px_-2px_rgba(28,25,23,0.04)] transition-[border-color,box-shadow] duration-300 hover:shadow-[0_20px_40px_-12px_rgba(89,17,11,0.14)] [transform-style:preserve-3d] will-change-transform"
-                style={
-                  {
-                    borderColor: isLive ? 'rgba(27, 111, 56, 0.35)' : '#E4DACB',
-                    '--spotlight-x': '50%',
-                    '--spotlight-y': '50%',
-                    '--spotlight-opacity': '0',
-                  } as React.CSSProperties
-                }
-              >
-                {/* Dynamic Cursor Spotlight Sheen Overlay */}
-                <div
-                  className="pointer-events-none absolute inset-0 rounded-[12px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{
-                    background: isLive
-                      ? `radial-gradient(circle 280px at var(--spotlight-x) var(--spotlight-y), rgba(27, 111, 56, 0.09), transparent 80%)`
-                      : `radial-gradient(circle 280px at var(--spotlight-x) var(--spotlight-y), rgba(89, 17, 11, 0.08), transparent 80%)`,
-                  }}
-                />
-
-                <Link href="/clients" className="relative z-10 flex flex-1 flex-col justify-between">
-                  <div>
-                    {/* Top Badge & Domain */}
-                    <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#F4ECE1]">
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1 font-mono text-[10px] font-medium uppercase ${
-                          isLive
-                            ? 'bg-[#EAF5EC] text-[#1B6F38] font-semibold border border-[#1B6F38]/25'
-                            : 'bg-[#F4ECE1] text-[#7A5424]'
-                        }`}
-                      >
-                        {isLive ? (
-                          <>
-                            <span className="relative flex h-2 w-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1B6F38] opacity-75" />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1B6F38]" />
-                            </span>
-                            <span>Live Mandate</span>
-                          </>
-                        ) : (
-                          client.badge
-                        )}
-                      </span>
-
-                      <span className="font-mono text-[10.5px] uppercase tracking-wider text-[#78716C]">
-                        {client.domain.split('&')[0].trim()}
-                      </span>
-                    </div>
-
-                    {/* Big Prominent Logo Stage with 3D Depth */}
-                    <div
-                      className={`relative my-4 flex aspect-[3/1] w-full items-center justify-center rounded-[8px] bg-[#FAF8F5] p-3 border transition-colors duration-300 ${
-                        isLive
-                          ? 'border-[#1B6F38]/25 group-hover:border-[#1B6F38]/50 bg-[#F4F9F5]'
-                          : 'border-[#E4DACB] group-hover:border-[#59110B]/40'
-                      }`}
-                    >
-                      <Image
-                        src={client.logo}
-                        alt={`${client.name} logo - IFSA NIT Trichy client mandate`}
-                        width={360}
-                        height={120}
-                        className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-
-                    {/* Name & Tagline */}
-                    <div className="mt-2">
-                      <div className="flex items-baseline justify-between gap-2">
-                        <h4 className="font-serif text-[19px] font-normal text-[#1C1917] group-hover:text-[#59110B] transition-colors">
-                          {client.name}
-                        </h4>
-                        {client.statMetric && (
-                          <span className="text-[11px] font-mono text-[#78716C]">
-                            {client.statMetric}
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-1 text-[13px] leading-snug text-[#78716C]">
-                        {client.tagline}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Footer Action */}
-                  <div className="mt-5 border-t border-[#F4ECE1] pt-3 flex items-center justify-between text-[12.5px] font-medium text-[#59110B]">
-                    <span>Explore Advisory Mandate</span>
-                    <span className="transition-transform duration-200 group-hover:translate-x-1.5">
-                      →
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            )
-          })}
-        </div>
-        </div>{/* end dynamic bg band wrapper */}
-
-        {/* Link to partnership details */}
-        <div className="mt-14">
-          <Link
-            href="/clients"
-            className="group inline-flex items-center gap-2 rounded-full border border-[#E4DACB] bg-white px-5 py-2.5 text-[14px] font-medium text-[#1C1917] shadow-xs transition-all duration-200 hover:border-[#59110B] hover:text-[#59110B] hover:shadow-sm"
-          >
-            <span>Explore 3 active mandates &amp; 6 completed institutional case studies</span>
-            <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-          </Link>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes partner-scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .animate-\\[partner-scroll_32s_linear_infinite\\] {
-            animation: none !important;
-          }
-        }
-      `}</style>
     </section>
   )
 }

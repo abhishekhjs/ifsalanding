@@ -7,10 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-serif: var(--font-serif), "DM Serif Display", Georgia, serif;
-  --font-sans: var(--font-sans), "DM Sans", system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-heading: var(--font-serif), "DM Serif Display", Georgia, serif;
+  --font-serif: var(--font-serif), "Fraunces", Georgia, serif;
+  --font-sans: var(--font-sans), "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+  --font-heading: var(--font-serif), "Fraunces", Georgia, serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -47,54 +47,48 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --ease-slow: cubic-bezier(.405, 0, .025, 1);
+  --ease-minor-spring: cubic-bezier(0.18, 0.89, 0.82, 1.04);
+  @keyframes bg-position {
+  0% {
+    background-position: 0% 50%;
+    }
+  100% {
+    background-position: 100% 50%;
+    }
+  }
 }
 
 :root {
-  /* IFSA brand colours */
-  --canvas-cream: #FAF8F5;
-  --surface-linen: #F4ECE1;
-  --surface-subtle: #EDE4D6;
-  --mahogany-deep: #400A06;
-  --mahogany-base: #59110B;
-  --mahogany-accent: #781D1D;
-  --accent-brass: #B48344;
-  --brass-ink: #7A5424;
-  --text-charcoal: #1C1917;
-  --text-slate: #44403C;
-  --text-muted: #78716C;
-  --border-hairline: #E4DACB;
-  --border-strong: #BFAFA0;
-  --metric-positive: #1F513F;
-  --metric-negative: #7A1C16;
-  --tint-mahogany: rgba(89, 17, 11, .06);
-  --tint-brass: rgba(180, 131, 68, .16);
-  --mesh: radial-gradient(60% 60% at 18% 12%, rgba(180, 131, 68, .22), transparent 70%),
-    radial-gradient(55% 55% at 88% 20%, rgba(120, 29, 29, .14), transparent 70%),
-    radial-gradient(60% 60% at 60% 100%, rgba(244, 236, 225, 1), transparent 70%);
-  --shadow-rest: 0 2px 8px -2px rgba(89, 17, 11, .04), 0 1px 3px 0 rgba(28, 25, 23, .03);
-  --shadow-hover: 0 12px 24px -6px rgba(89, 17, 11, .07), 0 4px 8px -2px rgba(28, 25, 23, .04);
-  --shadow-modal: 0 20px 32px -8px rgba(64, 10, 6, .12), 0 8px 16px -4px rgba(28, 25, 23, .06);
-
-  /* Shadcn semantic tokens mapped to IFSA palette */
-  --background: #FAF8F5;
-  --foreground: #1C1917;
-  --card: #FFFFFF;
-  --card-foreground: #1C1917;
-  --popover: #FFFFFF;
-  --popover-foreground: #1C1917;
-  --primary: #59110B;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F4ECE1;
-  --secondary-foreground: #1C1917;
-  --muted: #F4ECE1;
-  --muted-foreground: #78716C;
-  --accent: #F4ECE1;
-  --accent-foreground: #1C1917;
+  /* Broadsheet Ledger — OKLCH Design Tokens */
+  --background: oklch(0.972 0.012 85);
+  --foreground: oklch(0.19 0.02 255);
+  --card: oklch(0.99 0.006 85);
+  --card-foreground: oklch(0.19 0.02 255);
+  --popover: oklch(0.99 0.006 85);
+  --popover-foreground: oklch(0.19 0.02 255);
+  --primary: oklch(0.38 0.075 162);
+  --primary-foreground: oklch(0.99 0.006 85);
+  --secondary: oklch(0.93 0.018 85);
+  --secondary-foreground: oklch(0.19 0.02 255);
+  --muted: oklch(0.93 0.018 85);
+  --muted-foreground: oklch(0.52 0.03 85);
+  --accent: oklch(0.78 0.12 78);
+  --accent-foreground: oklch(0.19 0.02 255);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #E4DACB;
-  --input: #E4DACB;
-  --ring: #59110B;
-  --radius: 0.25rem;
+  --border: oklch(0.86 0.02 85);
+  --input: oklch(0.86 0.02 85);
+  --ring: oklch(0.38 0.075 162);
+  --radius: 0.125rem;
+
+  /* Extended Broadsheet tokens */
+  --signal: oklch(0.62 0.2 32);
+  --shadow-ledger: 5px 5px 0 0 oklch(0.19 0.02 255);
+  --shadow-ledger-sm: 3px 3px 0 0 oklch(0.19 0.02 255);
+  --canvas: oklch(0.972 0.012 85);
+  --ink: oklch(0.19 0.02 255);
+  --brass: oklch(0.78 0.12 78);
+  --forest: oklch(0.38 0.075 162);
 }
 
 .dark {
@@ -146,7 +140,7 @@
   }
 
   a {
-    color: var(--mahogany-base);
+    color: var(--primary);
   }
 
   /* Skip link */
@@ -154,7 +148,7 @@
     position: absolute;
     left: -999px;
     top: 8px;
-    background: var(--mahogany-base);
+    background: var(--primary);
     color: #fff;
     padding: 8px 16px;
     border-radius: 4px;
@@ -172,6 +166,15 @@
 @keyframes partner-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-fwd {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes marquee-rev {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 
 /* Lively Micro-animations & Interactive Effects */

@@ -1,29 +1,33 @@
 import type { Metadata } from 'next'
-import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
+import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import { NavBar } from '@/components/nav-bar'
 import { Footer } from '@/components/footer'
 import { SmoothScrollProvider } from '@/components/smooth-scroll-provider'
 import { AnnouncementBar } from '@/components/announcement-bar'
+import CookieBanner from '@/components/animata/skeleton/cookie-banner'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const dmSans = DM_Sans({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-})
-
-const dmSerif = DM_Serif_Display({
-  subsets: ['latin'],
-  weight: ['400'],
+  axes: ['opsz'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
   display: 'swap',
 })
 
-const jetbrainsMono = JetBrains_Mono({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
   variable: '--font-mono',
   display: 'swap',
 })
@@ -75,9 +79,13 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/icon.jpg',
-    apple: '/icon.jpg',
-  }
+    icon: [
+      { url: '/ifsa-favicon.png' },
+      { url: '/ifsa-favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/ifsa-favicon.png',
+    apple: '/ifsa-favicon.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -86,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@type': 'Organization',
     name: 'IFSA NIT Trichy',
     url: 'https://ifsanitt.vercel.app',
-    logo: 'https://ifsanitt.vercel.app/icon.jpg',
+    logo: 'https://ifsanitt.vercel.app/ifsa-favicon.png',
     description: 'The 10th APAC chapter of the International Finance Students Association, founded at NIT Trichy.',
     foundingDate: '2024-12-02',
     sameAs: [
@@ -102,8 +110,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <html lang="en" className={`${dmSans.variable} ${dmSerif.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased m-0 bg-[#FAF8F5] text-[#1C1917]">
+    <html lang="en" className={`${fraunces.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
+      <body className="font-sans antialiased m-0">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -114,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <NavBar />
           <main id="main">{children}</main>
           <Footer />
+          <CookieBanner />
         </SmoothScrollProvider>
         <Analytics />
         <SpeedInsights />
